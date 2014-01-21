@@ -1,4 +1,5 @@
 require 'v8'
+require 'json'
 
 class CouchDb
   def self.load_config
@@ -14,7 +15,6 @@ class CouchDb
   def self.connection
     conn = Faraday.new(:url => self.base_url) do |faraday|
       faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :logger                  # log requests to STDOUT
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
     conn
@@ -22,45 +22,50 @@ class CouchDb
 
   def self.get id
     response = connection.get("/#{@@db_name}/#{id}")
-    response.body
+    JSON.parse response.body
   end
 
   def self.put id, body
     response = connection.put do |req|
       req.url "#{@@db_name}/#{id}"
       req.headers['Content-Type'] = 'application/json'
-      req.body = body
+      req.body = body.to_json
     end
-    p response
-    response.body
+    JSON.parse response.body
   end
 
   def self.load_design_documents
     docs = Dir.glob(File.join(Rails.root, 'app', 'design_documents', '*.js'))
-    docs.each do |doc_name|
-      doc_id = File.basename(doc_name, '.js')
-=begin
+    docs.each do |doc_path|
+      doc_id = File.basename(doc_path, '.js')
+
+      doc_json = self.read_design_document doc_path
+
       puts "looking for #{doc_id}"
       existing_document = self.get("_design/#{doc_id}")
 
-      if !existing_document.match /error/
-        puts "Oh, it's not there:"
-        puts existing_document.error
+      if existing_document['error'].nil?
+        _rev = existing_document.delete('_rev')
+        puts "Found existing _rev #{_rev}"
+        if existing_document != doc_json
+          puts existing_document
+          puts doc_json
+          puts "Definition has changed, updating..."
+          doc_json['_rev'] = _rev
+          puts self.put("_design/#{doc_id}", doc_json)
+        end
       else
-        puts "found #{existing_document}"
+        puts "design document not found, inserting..."
+        puts self.put("_design/#{doc_id}", doc_json)
       end
-=end
-
-
-      doc = File.read(doc_name)
-      docJson = self.read_design_document(doc)
-      puts self.put("_design/#{doc_id}", docJson)
     end
   end
 
-  def self.read_design_document document_text
+  def self.read_design_document file_path
+    doc_js = File.read(file_path)
+
     cxt = V8::Context.new
-    cxt.eval("
+    doc_json = cxt.eval("
       convertFunctionsToStrings = function(document) {
         var action, fn, functions, viewName, _ref, _results;
         _ref = document.views;
@@ -80,10 +85,11 @@ class CouchDb
         return _results;
       };
 
-      doc = #{document_text}
+      doc = #{doc_js}
       convertFunctionsToStrings(doc);
       JSON.stringify(doc);
     ")
+    JSON.parse(doc_json)
   end
 
 end
