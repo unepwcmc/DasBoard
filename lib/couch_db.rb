@@ -45,22 +45,16 @@ class CouchDb
 
       doc_json = self.read_design_document doc_path
 
-      puts "looking for #{doc_id}"
       existing_document = self.get("_design/#{doc_id}")
 
       if existing_document['error'].nil?
         _rev = existing_document.delete('_rev')
-        puts "Found existing _rev #{_rev}"
         if existing_document != doc_json
-          puts existing_document
-          puts doc_json
-          puts "Definition has changed, updating..."
           doc_json['_rev'] = _rev
-          puts self.put("_design/#{doc_id}", doc_json)
+          self.put("_design/#{doc_id}", doc_json)
         end
       else
-        puts "design document not found, inserting..."
-        puts self.put("_design/#{doc_id}", doc_json)
+        self.put("_design/#{doc_id}", doc_json)
       end
     end
   end
