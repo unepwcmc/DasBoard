@@ -5,11 +5,17 @@ class CouchDb
   def self.load_config
     @@host = 'localhost'
     @@port = '5984'
-    @@db_name = 'das_board'
+
+    env = Rails.env || 'development'
+    @@db_name = "das_board_#{env}"
   end
 
   def self.create_database
-    self.put "", {}
+    self.put "/#{@@db_name}/"
+  end
+
+  def self.delete_database
+    self.delete "/#{@@db_name}/"
   end
 
   def self.base_url
@@ -24,38 +30,50 @@ class CouchDb
     conn
   end
 
-  def self.get id
-    response = connection.get("/#{@@db_name}/#{id}")
+  def self.delete url
+    response = connection.delete(url)
     JSON.parse response.body
   end
 
-  def self.put id, body
+  def self.get url
+    response = connection.get(url)
+    JSON.parse response.body
+  end
+
+  def self.put url, body=""
     response = connection.put do |req|
-      req.url "#{@@db_name}/#{id}"
+      req.url url
       req.headers['Content-Type'] = 'application/json'
       req.body = body.to_json
     end
     JSON.parse response.body
   end
 
-  def self.load_design_documents
-    docs = Dir.glob(File.join(Rails.root, 'app', 'design_documents', '*.js'))
-    docs.each do |doc_path|
-      doc_id = File.basename(doc_path, '.js')
+  def self.get_by_id id
+    self.get "#{@@db_name}/#{id}"
+  end
 
+  def self.design_documents
+    Dir.glob(File.join(Rails.root, 'app', 'design_documents', '*.js'))
+  end
+
+  def self.load_design_documents
+    @docs ||= design_documents
+
+    @docs.each do |doc_path|
+      doc_id = File.basename(doc_path, '.js')
       doc_json = self.read_design_document doc_path
 
-      existing_document = self.get("_design/#{doc_id}")
+      existing_document = self.get_by_id("_design/#{doc_id}")
 
       if existing_document['error'].nil?
         _rev = existing_document.delete('_rev')
         if existing_document != doc_json
           doc_json['_rev'] = _rev
-          self.put("_design/#{doc_id}", doc_json)
         end
-      else
-        self.put("_design/#{doc_id}", doc_json)
       end
+
+      self.put("#{@@db_name}/_design/#{doc_id}", doc_json)
     end
   end
 
