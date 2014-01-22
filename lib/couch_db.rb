@@ -8,6 +8,10 @@ class CouchDb
     @@db_name = 'das_board'
   end
 
+  def self.create_database
+    self.put "", {}
+  end
+
   def self.base_url
     "http://#{@@host}:#{@@port}/"
   end
