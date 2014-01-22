@@ -1,21 +1,13 @@
 require 'v8'
 require 'json'
 
-class CouchDb
+class Couch
   def self.load_config
     @@host = 'localhost'
     @@port = '5984'
 
     env = Rails.env || 'development'
-    @@db_name = "das_board_#{env}"
-  end
-
-  def self.create_database
-    self.put "/#{@@db_name}/"
-  end
-
-  def self.delete_database
-    self.delete "/#{@@db_name}/"
+    Couch::Db.set_db("das_board_#{env}")
   end
 
   def self.base_url
@@ -49,10 +41,6 @@ class CouchDb
     JSON.parse response.body
   end
 
-  def self.get_by_id id
-    self.get "#{@@db_name}/#{id}"
-  end
-
   def self.design_documents
     Dir.glob(File.join(Rails.root, 'app', 'design_documents', '*.js'))
   end
@@ -64,7 +52,7 @@ class CouchDb
       doc_id = File.basename(doc_path, '.js')
       doc_json = self.read_design_document doc_path
 
-      existing_document = self.get_by_id("_design/#{doc_id}")
+      existing_document = self::Db.get("_design/#{doc_id}")
 
       if existing_document['error'].nil?
         _rev = existing_document.delete('_rev')
@@ -73,7 +61,7 @@ class CouchDb
         end
       end
 
-      self.put("#{@@db_name}/_design/#{doc_id}", doc_json)
+      Couch::Db.put("_design/#{doc_id}", doc_json)
     end
   end
 
@@ -108,4 +96,34 @@ class CouchDb
     JSON.parse(doc_json)
   end
 
+  class Db
+    def self.set_db db_name
+      @@db_name = db_name
+    end
+
+    def self.create_database
+      Couch.put "/#{@@db_name}/"
+    end
+
+    def self.delete_database
+      Couch.delete "/#{@@db_name}/"
+    end
+
+    def self.get id
+      Couch.get "#{@@db_name}/#{id}"
+    end
+
+    def self.put id, body
+      Couch.put "#{@@db_name}/#{id}", body
+    end
+
+    def self.post body=""
+      response = Couch.connection.post do |req|
+        req.url "/#{@@db_name}"
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json
+      end
+      JSON.parse response.body
+    end
+  end
 end

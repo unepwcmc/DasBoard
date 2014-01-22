@@ -6,9 +6,9 @@ require "minitest/autorun"
 
 class Minitest::Unit::TestCase
   def before_teardown
-    CouchDb.delete_database
-    CouchDb.create_database
-    CouchDb.load_design_documents
+    Couch::Db.delete_database
+    Couch::Db.create_database
+    Couch.load_design_documents
   end
 end
 
