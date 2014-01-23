@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectTest < MiniTest::Unit::TestCase
+class ProjectTest < ActiveSupport::TestCase
   def test_that_projects_all_returns_only_project_documents
     Couch::Db.post({type: "project"})
     Couch::Db.post({type: "not a project"})
