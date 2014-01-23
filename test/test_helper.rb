@@ -4,13 +4,12 @@ require 'rails/test_help'
 
 require "minitest/autorun"
 
-class Minitest::Unit::TestCase
-  def before_teardown
+class ActiveSupport::TestCase
+  def setup
     Couch::Db.delete_database
     Couch::Db.create_database
     Couch.load_design_documents
   end
 end
 
-class ActiveSupport::TestCase
-end
+require 'mocha/test_unit'

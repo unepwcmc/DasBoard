@@ -21,3 +21,5 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 
 gem 'debugger'
+
+gem 'mocha'
