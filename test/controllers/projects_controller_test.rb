@@ -4,7 +4,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_the_index_assigns_all_projects
     Couch::Db.
       expects(:get).
-      with('_designs/projects/_views/all').
+      with('_design/projects/_view/all').
       returns({'rows' => [{
         name: 'An project',
         type: "project"

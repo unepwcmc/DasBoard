@@ -9,7 +9,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     Couch::Db.
       expects(:get).
-      with('_designs/projects/_views/all').
+      with('_design/projects/_view/all').
       returns({'rows' => [project]})
 
     get '/projects'
