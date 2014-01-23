@@ -33,7 +33,7 @@ class Couch
     raise Couch::Exception.new(json) if json['error'].present?
     return json
   end
-
+
   def self.put url, body=""
     response = connection.put do |req|
       req.url url
