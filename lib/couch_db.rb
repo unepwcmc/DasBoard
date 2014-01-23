@@ -29,9 +29,11 @@ class Couch
 
   def self.get url
     response = connection.get(url)
-    JSON.parse response.body
+    json = JSON.parse response.body
+    raise Couch::Exception.new(json) if json['error'].present?
+    return json
   end
-
+
   def self.put url, body=""
     response = connection.put do |req|
       req.url url
@@ -52,16 +54,16 @@ class Couch
       doc_id = File.basename(doc_path, '.js')
       doc_json = self.read_design_document doc_path
 
-      existing_document = self::Db.get("_design/#{doc_id}")
-
-      if existing_document['error'].nil?
+      begin
+        existing_document = self::Db.get("_design/#{doc_id}")
         _rev = existing_document.delete('_rev')
         if existing_document != doc_json
           doc_json['_rev'] = _rev
         end
+      rescue Couch::Exception
+      ensure
+        Couch::Db.put("_design/#{doc_id}", doc_json)
       end
-
-      Couch::Db.put("_design/#{doc_id}", doc_json)
     end
   end
 
@@ -94,6 +96,9 @@ class Couch
       JSON.stringify(doc);
     ")
     JSON.parse(doc_json)
+  end
+
+  class Exception < StandardError
   end
 
   class Db
