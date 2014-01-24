@@ -1,5 +1,12 @@
 <ul id="projects">
   <% @projects.each do |project| %>
-    <li><%= project['name'] %></li>
+    <li>
+      <%= project['value']['name'] %>
+      <ul>
+        <% project['value']['objectives'].each do |objective| %>
+          <li><%= objective['name'] %></li>
+        <% end %>
+      </ul>
+    </li>
   <% end %>
 </ul>

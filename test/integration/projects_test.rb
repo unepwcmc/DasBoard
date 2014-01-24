@@ -4,13 +4,15 @@ class ProjectsTest < ActionDispatch::IntegrationTest
   test "/projects renders a list of projects by name" do
     project = {
       name: 'An project',
-      type: "project"
+      objectives: []
     }.stringify_keys
 
     Couch::Db.
       expects(:get).
-      with('_design/projects/_view/all').
-      returns({'rows' => [project]})
+      with('_design/projects/_view/with_nested_objectives').
+      returns({'rows' => [{
+        "value" => project
+      }]})
 
     get '/projects'
 
@@ -28,60 +30,33 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     project = {
       id: 'abc',
       name: 'An project',
-      type: "project"
+      objectives: [{
+        "name" => 'objective 1'
+      },{
+        "name" => 'objective 2'
+      }]
     }.stringify_keys
-
-    objective = {
-      id: 'xyz',
-      type: "objective",
-      project_id: project['id'],
-      title: 'objective 1'
-    }
-
-    objective2 = {
-      id: 'xyy',
-      type: "objective",
-      project_id: project['id'],
-      title: 'objective 2'
-    }
-
-    results = [
-      {
-        id: project['id'],
-        key: [project['id'], 0],
-        value: project
-      }, {
-        id: objective['id'],
-        key: [project['id'], 1, 'objective'],
-        value: objective
-      }, {
-        id: objective2['id'],
-        key: [project['id'], 1, 'objective'],
-        value: objective2
-      }
-    ]
 
     Couch::Db.
       expects(:get).
-      with('_design/projects/_view/all').
-      returns({'rows' => results})
+      with('_design/projects/_view/with_nested_objectives').
+      returns({'rows' => [{
+        "value" => project
+      }]})
 
     get '/projects'
 
     assert_response :success
 
     assert_select "ul#projects" do
-      assert_select "li", {
+      assert_select "> li", {
         count: 1,
-        text: project['name']
-      }, 'Expected to see project name'
-
-      assert_select "ul" do
-        assert_select "li", { count: 2 }, 'Expected to see project name'
-        assert_select "li:first-child", { text: objective['title'] }
-        assert_select "li:last-child", { text: objective2['title'] }
-      end
+      }, 'Expected there only to be one project'
     end
 
+    assert_select "ul#projects ul" do
+      assert_select "li:first-child", { count: 1, text: "objective 1" }
+      assert_select "li:last-child", { count: 1, text: "objective 2" }
+    end
   end
 end
