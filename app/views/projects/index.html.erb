@@ -4,7 +4,7 @@
       <%= project['value']['name'] %>
       <ul>
         <% project['value']['objectives'].each do |objective| %>
-          <li><%= objective['name'] %></li>
+          <li><%= link_to objective['name'], objective_path(objective['_id']) %></li>
         <% end %>
       </ul>
     </li>

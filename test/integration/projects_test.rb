@@ -31,8 +31,10 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       id: 'abc',
       name: 'An project',
       objectives: [{
+        "_id" => '1',
         "name" => 'objective 1'
       },{
+        "_id" => '2',
         "name" => 'objective 2'
       }]
     }.stringify_keys

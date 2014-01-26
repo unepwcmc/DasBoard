@@ -13,6 +13,7 @@ DasBoard::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :projects, only: ['index']
+  resources :objectives, only: ['show']
 
   # Example resource route with options:
   #   resources :products do
