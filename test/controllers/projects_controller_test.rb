@@ -8,9 +8,9 @@ class ProjectsControllerTest < ActionController::TestCase
       with('_design/projects/_view/all').
       returns({'rows' => [{
         "value" => {
+          "_id" => 'anid',
           "name" => 'An project',
           "type" => "project",
-          "objectives" => []
         }
       }]})
 
@@ -27,15 +27,13 @@ class ProjectsControllerTest < ActionController::TestCase
   test ':show assigns the project' do
     Couch::Db.
       expects(:get).
-      with('_all_docs/?key=123').
-      returns({'rows' => [{
-        "id" => "123",
-        "value" => {
-          "name" => 'An project',
-          "type" => "project",
-          "objectives" => []
-        }
-      }]})
+      with('123').
+      returns({
+        "_id" => "123",
+        "name" => 'An project',
+        "type" => "project",
+        "objectives" => []
+      })
 
     get :show, id: '123'
 
@@ -43,7 +41,7 @@ class ProjectsControllerTest < ActionController::TestCase
 
     assigned_project = assigns(:project)
     assert_not_nil assigned_project, 'Expected @project to be assigned'
-    assert_equal 'An project', assigned_project.first['value']['name']
+    assert_equal 'An project', assigned_project['name']
   end
 
 end

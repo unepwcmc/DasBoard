@@ -6,9 +6,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    id = params[:id]
-    project_response = Couch::Db.get("_all_docs/?key=#{id}")
-    @project = project_response['rows']
+    @project = Couch::Db.get(params[:id])
   end
 
 end
