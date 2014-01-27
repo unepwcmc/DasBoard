@@ -1,7 +1,15 @@
 <h2><%= @project['name'] %></h2>
 
-<ul>
-  <% @project['objectives'].each do |objective| %>
-    <li><h3><%= objective['name'] %></h3></li>
-  <% end %>
-</ul>
+<% @project['objectives'].each do |objective| %>
+  <section class="objective" id="<%= objective["id"] %>">
+    <h3><%= objective['name'] %></h3>
+  </section>
+<% end %>
+
+<% content_for :javascript do %>
+  <script>
+    $(function() {
+      chartView = new MetricChartView({}, {});
+    });
+  </script>
+<% end %>
