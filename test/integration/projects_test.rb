@@ -9,7 +9,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     Couch::Db.
       expects(:get).
-      with('_design/projects/_view/with_nested_objectives').
+      with('_design/projects/_view/all').
       returns({'rows' => [{
         "value" => project
       }]})
