@@ -19,6 +19,7 @@ gem 'therubyracer', platforms: :ruby
 
 gem 'jquery-rails'
 gem 'foundation-rails'
+gem 'chart-js-rails'
 
 gem 'debugger'
 
