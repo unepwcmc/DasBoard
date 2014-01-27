@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require foundation
-//= require Chart
+//= require Chart.min
 //= require_tree .
