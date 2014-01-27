@@ -58,4 +58,37 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 1, nested_objectives.length,
       "Expected species to have 1 nested objective"
   end
+
+  test "projects/with_nested_metrics returns projects with the metrics
+  associated to their objectives nested " do
+    metric = {
+      name: "Total downloads",
+      type: "metric"
+    }
+    metric['id'] = Couch::Db.post(metric)['id']
+
+    ppe_project = {
+      name: "Protected Planet",
+      type: "project",
+      objectives: [
+        {name: 'increase downloads', metric_id: metric['id']}
+      ]
+    }
+    ppe_project['id'] = Couch::Db.post(ppe_project)['id']
+
+    results = Couch::Db.get(
+      '_design/projects/_view/with_nested_metrics?group=true&group_level=1'
+    )
+    projects = results['rows']
+
+    assert_equal 1, projects.length
+    project = projects[0]
+    objective = project['objectives'][0]
+    
+    assert_not_nil objective['metric'],
+      "Expected the nested objective to have 'metric' attribute"
+    assert_equal objective['metric']['id'], metric['id'],
+      "Expected the nested metric to have the correct id"
+  end
+
 end
