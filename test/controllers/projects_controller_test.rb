@@ -27,13 +27,15 @@ class ProjectsControllerTest < ActionController::TestCase
   test ':show assigns the project' do
     Couch::Db.
       expects(:get).
-      with('123').
-      returns({
-        "_id" => "123",
-        "name" => 'An project',
-        "type" => "project",
-        "objectives" => []
-      })
+      with('_design/projects/_view/with_nested_objectives?startkey=["123", null]&endkey=["123", {}]').
+      returns({"rows" => [{
+        "value" => {
+          "_id" => "123",
+          "name" => 'An project',
+          "type" => "project",
+          "objectives" => []
+        }
+      }]})
 
     get :show, id: '123'
 

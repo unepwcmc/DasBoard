@@ -3,7 +3,7 @@ require 'test_helper'
 class ProjectTest < ActiveSupport::TestCase
   test 'projects/all view turns only project documents with nested objectives' do
     Couch::Db.post({type: "project"})
-    Couch::Db.post({type: "not a project"})
+    Couch::Db.post({type: "objective"})
 
     results = Couch::Db.get('_design/projects/_view/all')
     projects = results["rows"]
@@ -15,30 +15,25 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 'project', project["type"]
   end
 
-  test 'projects/all returns the project with nested objectives' do
-    nrt_project = Couch::Db.post({
-      name: "NRT",
-      type: "project",
-      objectives: [
-        {name: 'objective 1 tim'},
-        {name: 'objective 2 adam'}
-      ]
+  test 'projects/with_nested_objectives returns the project objectives' do
+    nrt_project = Couch::Db.post({name: "NRT", type: "project"})
+    species_project = Couch::Db.post({name: "Species+", type: "project"})
+
+    first_child_of_nrt = Couch::Db.post({
+      project_id: nrt_project['id'],type: "objective", name: "objective 1 tim"
+    })
+    second_child_of_nrt = Couch::Db.post({
+      project_id: nrt_project['id'],type: "objective", name: "objective 2 adam"
+    })
+    child_of_species = Couch::Db.post({
+      project_id: species_project['id'],type: "objective", name: "objective 3 james"
     })
 
-    species_project = Couch::Db.post({
-      name: "Species+",
-      type: "project",
-      objectives: [
-        {name: 'objective 2 james'}
-      ]
-    })
+    results = Couch::Db.get('_design/projects/_view/with_nested_objectives?group=true&group_level=1')
 
-    results = Couch::Db.get('_design/projects/_view/all')
-    projects = results['rows']
+    assert_equal 2, results['rows'].length
 
-    assert_equal 2, projects.length
-
-    first_result = projects[0]['value']
+    first_result = results['rows'][0]['value']
     assert_equal nrt_project['id'], first_result['_id'],
       "Expected the first returned project to be NRT"
 
@@ -48,7 +43,15 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 2, nested_objectives.length,
       "Expected the first project to have 2 nested objectives"
 
-    second_result = projects[1]['value']
+    nested_objective_ids = nested_objectives.map{|objective| objective['_id']}
+
+    assert nested_objective_ids.include?(first_child_of_nrt['id']),
+      "Expected NRT to have the first child nested"
+    assert nested_objective_ids.include?(second_child_of_nrt['id']),
+      "Expected NRT to have the second child nested"
+
+
+    second_result = results['rows'][1]['value']
     assert_equal species_project['id'], second_result['_id'],
       "Expected the second returned project to be species"
 
@@ -57,38 +60,10 @@ class ProjectTest < ActiveSupport::TestCase
     nested_objectives = second_result['objectives']
     assert_equal 1, nested_objectives.length,
       "Expected species to have 1 nested objective"
+
+    nested_objective_ids = nested_objectives.map{|objective| objective['_id']}
+
+    assert nested_objective_ids.include?(child_of_species['id']),
+      "Expected species to have the correct nested objective"
   end
-
-  test "projects/with_nested_metrics returns projects with the metrics
-  associated to their objectives nested " do
-    metric = {
-      name: "Total downloads",
-      type: "metric"
-    }
-    metric['id'] = Couch::Db.post(metric)['id']
-
-    ppe_project = {
-      name: "Protected Planet",
-      type: "project",
-      objectives: [
-        {name: 'increase downloads', metric_id: metric['id']}
-      ]
-    }
-    ppe_project['id'] = Couch::Db.post(ppe_project)['id']
-
-    results = Couch::Db.get(
-      '_design/projects/_view/with_nested_metrics?group=true&group_level=1'
-    )
-    projects = results['rows']
-
-    assert_equal 1, projects.length
-    project = projects[0]
-    objective = project['objectives'][0]
-    
-    assert_not_nil objective['metric'],
-      "Expected the nested objective to have 'metric' attribute"
-    assert_equal objective['metric']['id'], metric['id'],
-      "Expected the nested metric to have the correct id"
-  end
-
 end

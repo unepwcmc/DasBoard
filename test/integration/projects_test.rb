@@ -31,7 +31,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     project_id = '123abc'
     project = {
       name: 'An project',
-      objectives: []
+      type: 'project',
     }.stringify_keys
 
     Couch::Db.put("/#{project_id}", project)
@@ -49,11 +49,16 @@ class ProjectsTest < ActionDispatch::IntegrationTest
   test "/projects/:id renders the project's objectives" do
     project_attributes = {
       name: 'An project',
-      objectives: [
-        {name: 'objective 1 tim'}
-      ]
+      type: 'project'
     }
     project_id = Couch::Db.post(project_attributes)['id']
+
+    objective_attrs = {
+      name: "Increase ROI",
+      project_id: project_id,
+      type: "objective"
+    }
+    Couch::Db.post(objective_attrs)
 
     get "/projects/#{project_id}"
 
@@ -61,7 +66,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_select "h3", {
       count: 1,
-      text: project_attributes[:objectives][0][:name]
+      text: objective_attrs[:name]
     }, 'Expected to see objective name'
   end
 
