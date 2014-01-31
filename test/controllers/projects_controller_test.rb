@@ -23,18 +23,21 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'An project', assigned_projects.first['value']['name']
   end
 
-  test ':show assigns the project' do
-    Couch::Db.
-      expects(:get).
-      with('_design/projects/_view/with_nested_objectives?startkey=["123", null]&endkey=["123", {}]').
-      returns({"rows" => [{
-        "value" => {
+  test ':show assigns the project with nested metrics' do
+    project_json = {
           "_id" => "123",
           "name" => 'An project',
           "type" => "project",
           "objectives" => []
         }
+    Project.expects(:find_with_nested_objectives).
+      with('123').
+      returns({"rows" => [{
+        "value" => project_json
       }]})
+
+    Project.expects(:populate_metrics_on_objectives!).
+      with(project_json)
 
     get :show, id: '123'
 
