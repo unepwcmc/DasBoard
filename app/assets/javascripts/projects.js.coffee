@@ -28,3 +28,35 @@ class window.MetricChartView
 
   getCanvas: ->
     $("section##{@objective._id} #metric-#{@metric._id}")
+
+class window.AddObjectiveView
+  constructor: (@projectId) ->
+    @render()
+    @$el.find('button').click(@createObjective)
+
+  render: ->
+    @$el = $("""
+      <div class="edit-form">
+        <input value="New Objective">
+        <button class="small">Create</button>
+      </div>
+    """)
+    $('#add-objective').after(@$el)
+
+  createObjective: =>
+    objective =
+      name: @$el.find('input').val()
+      project_id: @projectId
+      type: 'objective'
+
+    $.ajax(
+      type: "POST"
+      url: "/objectives"
+      data: objective
+    ).success( ->
+      location.reload()
+    ).fail( (err) ->
+      alert("error creating objective, contact your local webmaster")
+    )
+    
+    objective

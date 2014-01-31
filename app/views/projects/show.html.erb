@@ -10,6 +10,10 @@
   </section>
 <% end %>
 
+<button id="add-objective" data-project-id="<%= @project['_id'] %>">
+  Add objective
+</button>
+
 <% content_for :javascript do %>
   <script>
     $(function() {
@@ -19,6 +23,11 @@
           <%= objective['metric'].to_json.html_safe %>
         );
       <% end %>
+
+      $('#add-objective').click(function(event) {
+        var projectId = $(event.target).attr('data-project-id');
+        new AddObjectiveView(projectId);
+      });
     });
   </script>
 <% end %>
