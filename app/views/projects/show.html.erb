@@ -3,6 +3,9 @@
 <% @project['objectives'].each do |objective| %>
   <section class="objective" id="<%= objective["id"] %>">
     <h3><%= objective['name'] %></h3>
+    <% if objective['metric'].present? %>
+      <h4><%= objective['metric']['name'] %></h4>
+    <% end %>
   </section>
 <% end %>
 

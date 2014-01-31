@@ -25,11 +25,11 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test ':show assigns the project with nested metrics' do
     project_json = {
-          "_id" => "123",
-          "name" => 'An project',
-          "type" => "project",
-          "objectives" => []
-        }
+      "_id" => "123",
+      "name" => 'An project',
+      "type" => "project",
+      "objectives" => []
+    }
     Project.expects(:find_with_nested_objectives).
       with('123').
       returns({"rows" => [{
