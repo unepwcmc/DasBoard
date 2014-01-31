@@ -58,12 +58,15 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       project_id: project_id,
       type: "objective"
     }
-    Couch::Db.post(objective_attrs)
+    objective_id = Couch::Db.post(objective_attrs)['id']
 
     get "/projects/#{project_id}"
 
     assert_response :success
 
+    assert_select "##{objective_id}", {
+      count: 1
+    }, "Expected to see an element with the objective id"
     assert_select "h3", {
       count: 1,
       text: objective_attrs[:name]
@@ -96,9 +99,8 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "h4", {
+    assert_select "canvas#metric-#{metric_id}", {
       count: 1,
-      text: metric_attrs[:name]
-    }, 'Expected to see the metric name'
+    }, 'Expect to see a metric placeholder'
   end
 end
