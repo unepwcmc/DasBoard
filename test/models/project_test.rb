@@ -1,12 +1,11 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  test 'projects/all view turns only project documents with nested objectives' do
+  test '#all returns only project documents with nested objectives' do
     Couch::Db.post({type: "project"})
     Couch::Db.post({type: "objective"})
 
-    results = Couch::Db.get('_design/projects/_view/all')
-    projects = results["rows"]
+    projects = Project.all
 
     assert_equal 1, projects.length,
       "Expected only 1 Project to be returned"
@@ -29,7 +28,7 @@ class ProjectTest < ActiveSupport::TestCase
       project_id: species_project['id'],type: "objective", name: "objective 3 james"
     })
 
-    results = Couch::Db.get('_design/projects/_view/with_nested_objectives?group=true&group_level=1')
+    results = Project.find_with_nested_objectives()
 
     assert_equal 2, results['rows'].length
 
@@ -65,5 +64,38 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert nested_objective_ids.include?(child_of_species['id']),
       "Expected species to have the correct nested objective"
+  end
+
+  test 'projects/with_nested_objectives supports filtering by project key' do
+    nrt_project = Couch::Db.post({name: "NRT", type: "project"})
+    species_project = Couch::Db.post({name: "Species+", type: "project"})
+
+    first_child_of_nrt = Couch::Db.post({
+      project_id: nrt_project['id'],type: "objective", name: "objective 1 tim"
+    })
+    second_child_of_nrt = Couch::Db.post({
+      project_id: nrt_project['id'],type: "objective", name: "objective 2 adam"
+    })
+
+    results = Project.find_with_nested_objectives(nrt_project['id'])
+
+    assert_equal 1, results['rows'].length
+
+    result = results['rows'][0]['value']
+    assert_equal nrt_project['id'], result['_id'],
+      "Expected the returned project to be NRT"
+
+    assert_kind_of Array, result['objectives'],
+      "Expected the result to have an array of nested objectives"
+    nested_objectives = result['objectives']
+    assert_equal 2, nested_objectives.length,
+      "Expected the project to have 2 nested objectives"
+
+    nested_objective_ids = nested_objectives.map{|objective| objective['_id']}
+
+    assert nested_objective_ids.include?(first_child_of_nrt['id']),
+      "Expected NRT to have the first child nested"
+    assert nested_objective_ids.include?(second_child_of_nrt['id']),
+      "Expected NRT to have the second child nested"
   end
 end

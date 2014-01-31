@@ -3,16 +3,15 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
 
   test ':index assigns all projects' do
-    Couch::Db.
-      expects(:get).
-      with('_design/projects/_view/all').
-      returns({'rows' => [{
+    Project.
+      expects(:all).
+      returns([{
         "value" => {
           "_id" => 'anid',
           "name" => 'An project',
           "type" => "project",
         }
-      }]})
+      }])
 
     get :index
 
