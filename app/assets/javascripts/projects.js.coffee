@@ -34,17 +34,42 @@ class window.MetricChartView
 
 class window.AddObjectiveView
   constructor: (@projectId) ->
-    @render()
+    @renderLoading()
     @$el.find('button').click(@createObjective)
+    @getMetrics()
 
-  render: ->
+  template: Handlebars.compile("""
+    <div class="edit-form">
+      <input value="New Objective">
+      <select>
+        {{#each metrics}}
+          <option value="{{_id}}">{{name}}</option>
+        {{/each}}
+      </select>
+      <button class="small">Create</button>
+    </div>
+  """)
+
+  render: =>
+    @$el = $(@template(metrics: @metrics))
+
+  renderLoading: ->
     @$el = $("""
       <div class="edit-form">
-        <input value="New Objective">
-        <button class="small">Create</button>
+        Loadin'...
       </div>
     """)
     $('#add-objective').after(@$el)
+
+  getMetrics: ->
+    $.getJSON("/metrics/#{@projectId}")
+      .success( (metrics) =>
+        @metrics = metrics
+        @render()
+      ).fail( ->
+        alert("error getting metrics, contact your local webmaster")
+        console.log arguments
+      )
 
   createObjective: =>
     objective =

@@ -21,10 +21,10 @@
         @project['objectives'].each do |objective|
           if objective['metric']
       %>
-        new MetricChartView(
-          <%= objective.to_json.html_safe %>,
-          <%= objective['metric'].to_json.html_safe %>
-        );
+            new MetricChartView(
+              <%= objective.to_json.html_safe %>,
+              <%= objective['metric'].to_json.html_safe %>
+            );
       <%
           end 
         end
