@@ -35,23 +35,21 @@ class window.MetricChartView
 class window.AddObjectiveView
   constructor: (@projectId) ->
     @renderLoading()
-    @$el.find('button').click(@createObjective)
+    @$el.on('click', 'button', @createObjective)
     @getMetrics()
 
   template: Handlebars.compile("""
-    <div class="edit-form">
-      <input value="New Objective">
-      <select>
-        {{#each metrics}}
-          <option value="{{_id}}">{{name}}</option>
-        {{/each}}
-      </select>
-      <button class="small">Create</button>
-    </div>
+    <input value="New Objective">
+    <select>
+      {{#each metrics}}
+        <option value="{{id}}">{{value.name}}</option>
+      {{/each}}
+    </select>
+    <button class="small">Create</button>
   """)
 
   render: =>
-    @$el = $(@template(metrics: @metrics))
+    @$el.html($(@template(metrics: @metrics)))
 
   renderLoading: ->
     @$el = $("""
@@ -62,7 +60,7 @@ class window.AddObjectiveView
     $('#add-objective').after(@$el)
 
   getMetrics: ->
-    $.getJSON("/metrics/#{@projectId}")
+    $.getJSON("/metrics")
       .success( (metrics) =>
         @metrics = metrics
         @render()
@@ -71,21 +69,30 @@ class window.AddObjectiveView
         console.log arguments
       )
 
+  getSelectedMetricId: ->
+    @$el.find('select').val()
+
   createObjective: =>
     objective =
       name: @$el.find('input').val()
       project_id: @projectId
       type: 'objective'
+      metric_id: @getSelectedMetricId()
 
     $.ajax(
       type: "POST"
       url: "/objectives"
-      data:
+      contentType: "application/json"
+      data: JSON.stringify(
         objective: objective
-    ).success( ->
-      location.reload()
+      )
+    ).success(
+      @close
     ).fail( (err) ->
       alert("error creating objective, contact your local webmaster")
     )
     
     objective
+
+  close: ->
+    location.reload()
