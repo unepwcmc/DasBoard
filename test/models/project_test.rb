@@ -30,9 +30,9 @@ class ProjectTest < ActiveSupport::TestCase
 
     results = Project.find_with_nested_objectives()
 
-    assert_equal 2, results['rows'].length
+    assert_equal 2, results.length
 
-    first_result = results['rows'][0]['value']
+    first_result = results[0]['value']
     assert_equal nrt_project['id'], first_result['_id'],
       "Expected the first returned project to be NRT"
 
@@ -50,7 +50,7 @@ class ProjectTest < ActiveSupport::TestCase
       "Expected NRT to have the second child nested"
 
 
-    second_result = results['rows'][1]['value']
+    second_result = results[1]['value']
     assert_equal species_project['id'], second_result['_id'],
       "Expected the second returned project to be species"
 
@@ -79,9 +79,9 @@ class ProjectTest < ActiveSupport::TestCase
 
     results = Project.find_with_nested_objectives(nrt_project['id'])
 
-    assert_equal 1, results['rows'].length
+    assert_equal 1, results.length
 
-    result = results['rows'][0]['value']
+    result = results[0]['value']
     assert_equal nrt_project['id'], result['_id'],
       "Expected the returned project to be NRT"
 

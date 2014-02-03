@@ -32,9 +32,9 @@ class ProjectsControllerTest < ActionController::TestCase
     }
     Project.expects(:find_with_nested_objectives).
       with('123').
-      returns({"rows" => [{
+      returns([{
         "value" => project_json
-      }]})
+      }])
 
     Project.expects(:populate_metrics_on_objectives!).
       with(project_json)
