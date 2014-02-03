@@ -1,5 +1,8 @@
 class window.MetricChartView
   constructor: (@objective, @metric) ->
+    unless @metric?
+      throw new Error("No metric provided, can't create MetricChartView")
+
     @render()
 
   render: ->

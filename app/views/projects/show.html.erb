@@ -17,12 +17,18 @@
 <% content_for :javascript do %>
   <script>
     $(function() {
-      <% @project['objectives'].each do |objective| %>
+      <%
+        @project['objectives'].each do |objective|
+          if objective['metric']
+      %>
         new MetricChartView(
           <%= objective.to_json.html_safe %>,
           <%= objective['metric'].to_json.html_safe %>
         );
-      <% end %>
+      <%
+          end 
+        end
+      %>
 
       $('#add-objective').click(function(event) {
         var projectId = $(event.target).attr('data-project-id');
