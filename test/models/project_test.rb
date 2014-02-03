@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  test '#all returns only project documents with nested objectives' do
+  test '#all returns only project documents' do
     Couch::Db.post({type: "project"})
     Couch::Db.post({type: "objective"})
 
@@ -97,5 +97,25 @@ class ProjectTest < ActiveSupport::TestCase
       "Expected NRT to have the first child nested"
     assert nested_objective_ids.include?(second_child_of_nrt['id']),
       "Expected NRT to have the second child nested"
+  end
+  
+
+  test '#populate_metrics_on_objectives populates the associated metrics on child objectives of a project' do
+    metric_name = "Total downloads"
+    download_metric = Couch::Db.post({name: metric_name, type: "metric"})
+    Couch::Db.post({name: "Nonsense", type: "metric"})
+
+    project = {
+      "objectives" => [{
+        "metric_id" => download_metric['id']
+      }]
+    }
+
+    Project.populate_metrics_on_objectives!(project)
+
+    objective = project['objectives'][0]
+
+    assert_equal objective['metric']['_id'], download_metric['id']
+    assert_equal objective['metric']['name'], metric_name
   end
 end

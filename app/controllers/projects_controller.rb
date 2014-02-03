@@ -6,10 +6,9 @@ class ProjectsController < ApplicationController
 
   def show
     id = params[:id]
-    result = Couch::Db.get(
-      "_design/projects/_view/with_nested_objectives?startkey=[\"#{id}\", null]&endkey=[\"#{id}\", {}]"
-    )
+    result = Project.find_with_nested_objectives(id)
     @project = result['rows'][0]['value']
+    Project.populate_metrics_on_objectives!(@project)
   end
 
 end

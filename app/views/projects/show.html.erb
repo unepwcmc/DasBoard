@@ -1,15 +1,24 @@
 <h2><%= @project['name'] %></h2>
 
 <% @project['objectives'].each do |objective| %>
-  <section class="objective" id="<%= objective["id"] %>">
+  <section class="objective" id="<%= objective["_id"] %>">
     <h3><%= objective['name'] %></h3>
+    <% if objective['metric'].present? %>
+      <canvas id="metric-<%= objective['metric']['_id'] %>" width="400" height="400">
+      </canvas>
+    <% end %>
   </section>
 <% end %>
 
 <% content_for :javascript do %>
   <script>
     $(function() {
-      chartView = new MetricChartView({}, {});
+      <% @project['objectives'].each do |objective| %>
+        new MetricChartView(
+          <%= objective.to_json.html_safe %>,
+          <%= objective['metric'].to_json.html_safe %>
+        );
+      <% end %>
     });
   </script>
 <% end %>

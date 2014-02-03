@@ -58,16 +58,49 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       project_id: project_id,
       type: "objective"
     }
-    Couch::Db.post(objective_attrs)
+    objective_id = Couch::Db.post(objective_attrs)['id']
 
     get "/projects/#{project_id}"
 
     assert_response :success
 
+    assert_select "##{objective_id}", {
+      count: 1
+    }, "Expected to see an element with the objective id"
     assert_select "h3", {
       count: 1,
       text: objective_attrs[:name]
     }, 'Expected to see objective name'
   end
 
+
+  test "/projects/:id renders the project's objectives' metrics" do
+    project_attributes = {
+      name: 'An project',
+      type: 'project'
+    }
+    project_id = Couch::Db.post(project_attributes)['id']
+
+    metric_attrs = {
+      name: "Total downloads",
+      type: "metric"
+    }
+    metric_id = Couch::Db.post(metric_attrs)['id']
+
+    objective_attrs = {
+      name: "Increase ROI",
+      project_id: project_id,
+      type: "objective",
+      metric_id: metric_id
+    }
+    Couch::Db.post(objective_attrs)
+
+    get "/projects/#{project_id}"
+
+    assert_response :success
+
+    assert_select "canvas#metric-#{metric_id}", {
+      count: 1,
+    }, 'Expect to see a metric placeholder'
+  end
 end

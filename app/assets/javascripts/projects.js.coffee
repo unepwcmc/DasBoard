@@ -3,9 +3,7 @@ class window.MetricChartView
     @render()
 
   render: ->
-    @$canvas = $('<canvas width="400" height="400"></canvas>')
-    #@(@objective.id).append(@$canvas)
-    $('section').append(@$canvas)
+    @$canvas = @getCanvas()
 
     context = @$canvas.get(0).getContext("2d")
     @chart = new Chart(context).Line(
@@ -27,3 +25,6 @@ class window.MetricChartView
         }
       ]
     )
+
+  getCanvas: ->
+    $("section##{@objective._id} #metric-#{@metric._id}")
