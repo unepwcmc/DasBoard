@@ -52,7 +52,8 @@ class window.AddObjectiveView
     $.ajax(
       type: "POST"
       url: "/objectives"
-      data: objective
+      data:
+        objective: objective
     ).success( ->
       location.reload()
     ).fail( (err) ->

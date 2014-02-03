@@ -17,8 +17,9 @@ class Project
     metric_ids = project['objectives'].map{|objective|
       objective['metric_id']
     }
-    return if metric_ids.length == 0
 
+    metric_ids.compact!
+    return if metric_ids.length == 0
     metric_ids.sort!
 
     result = Couch::Db.get(
