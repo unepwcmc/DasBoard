@@ -25,7 +25,7 @@ class Metric
   end
 
   def add_data_point data
-    @attributes[:data] ||= []
-    @attributes[:data].push data
+    @attributes['data'] ||= []
+    @attributes['data'].push data
   end
 end
