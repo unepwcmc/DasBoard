@@ -52,4 +52,17 @@ class CouchModelTest < ActiveSupport::TestCase
     assert_equal 2, model.attributes['_rev'],
       "Expected model to have updated the '_rev'"
   end
+
+  test "#view calls the given view in Couch::Db" do
+    Couch::Db.expects(:get)
+      .with("_design/couch%2Fmodels/_view/all")
+      .returns({
+        "rows" => []
+      })
+
+    result = Couch::Model.view(:all)
+
+    assert_equal [], result
+  end
+
 end

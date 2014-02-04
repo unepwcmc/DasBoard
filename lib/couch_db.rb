@@ -148,6 +148,14 @@ class Couch
       return new(attributes)
     end
 
+    def self.view view_name
+      pluralised_class_name = self.to_s.underscore.pluralize
+      url_encoded_class_name = URI.encode(pluralised_class_name, /\//)
+
+      results = Couch::Db.get("_design/#{url_encoded_class_name}/_view/#{view_name}")
+      results['rows']
+    end
+
     def save
       response = Couch::Db.put("/#{id}", @attributes)
       @attributes['_rev'] = response['rev']
