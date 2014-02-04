@@ -10,15 +10,30 @@
   </section>
 <% end %>
 
+<button id="add-objective" data-project-id="<%= @project['_id'] %>">
+  Add objective
+</button>
+
 <% content_for :javascript do %>
   <script>
     $(function() {
-      <% @project['objectives'].each do |objective| %>
-        new MetricChartView(
-          <%= objective.to_json.html_safe %>,
-          <%= objective['metric'].to_json.html_safe %>
-        );
-      <% end %>
+      <%
+        @project['objectives'].each do |objective|
+          if objective['metric']
+      %>
+            new MetricChartView(
+              <%= objective.to_json.html_safe %>,
+              <%= objective['metric'].to_json.html_safe %>
+            );
+      <%
+          end 
+        end
+      %>
+
+      $('#add-objective').click(function(event) {
+        var projectId = $(event.target).attr('data-project-id');
+        new AddObjectiveView(projectId);
+      });
     });
   </script>
 <% end %>

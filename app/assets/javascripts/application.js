@@ -12,6 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require foundation
+//= require handlebarz
 //= require Chart.min
-//= require_tree .
+//= require projects

@@ -4,21 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title><%= content_for?(:title) ? yield(:title) : "Das Board" %></title>
+    <title>Das Board Tests</title>
 
-    <%= stylesheet_link_tag    "application" %>
-    <%= javascript_include_tag "vendor/modernizr" %>
+    <%= stylesheet_link_tag "test" %>
     <%= csrf_meta_tags %>
   </head>
 
   <body>
-
-    <div class="row">
-      <%= yield %>
-    </div>
+    <div id="mocha"></div>
 
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "test" %>
 
-    <%= yield :javascript %>
+    <script>
+      <%= yield :javascript %>
+    </script>
   </body>
 </html>

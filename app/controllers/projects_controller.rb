@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   def show
     id = params[:id]
     result = Project.find_with_nested_objectives(id)
-    @project = result['rows'][0]['value']
+    @project = result[0]['value']
     Project.populate_metrics_on_objectives!(@project)
   end
 
