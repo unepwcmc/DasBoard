@@ -131,4 +131,26 @@ class Couch
       JSON.parse response.body
     end
   end
+
+  class Model
+    attr_accessor :attributes
+
+    def initialize attributes = {}
+      @attributes = attributes
+    end
+
+    def id
+      @attributes['_id']
+    end
+
+    def self.find id
+      attributes = Couch::Db.get(id)
+      return new(attributes)
+    end
+
+    def save
+      response = Couch::Db.put("/#{id}", @attributes)
+      @attributes['_rev'] = response['rev']
+    end
+  end
 end
