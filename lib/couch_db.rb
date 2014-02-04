@@ -157,7 +157,11 @@ class Couch
     end
 
     def save
-      response = Couch::Db.put("/#{id}", @attributes)
+      if id.nil?
+        response = Couch::Db.post(@attributes)
+      else
+        response = Couch::Db.put("/#{id}", @attributes)
+      end
       @attributes['_rev'] = response['rev']
     end
   end

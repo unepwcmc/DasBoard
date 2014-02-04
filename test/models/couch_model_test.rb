@@ -53,6 +53,22 @@ class CouchModelTest < ActiveSupport::TestCase
       "Expected model to have updated the '_rev'"
   end
 
+  test ".save on a new model creates a record in Couch::Db and gets the
+   _rev" do
+    model = Couch::Model.new({
+      'name' => 'Total uptime'
+    })
+
+    Couch::Db.expects(:post)
+      .with(model.attributes)
+      .returns({"rev" => 1})
+
+    model.save()
+
+    assert_equal 1, model.attributes['_rev'],
+      "Expected model to have updated the '_rev'"
+  end
+
   test "#view calls the given view in Couch::Db" do
     Couch::Db.expects(:get)
       .with("_design/couch%2Fmodels/_view/all")
