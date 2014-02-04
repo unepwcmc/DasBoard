@@ -9,15 +9,12 @@ class window.MetricChartView
     @$canvas = @getCanvas()
 
     context = @$canvas.get(0).getContext("2d")
-    if @metric.data?
 
-      labels = @metric.data.map( (data_point) ->
-        new Date(data_point.date*1000).toDateString()
-      )
+    if @metric.attributes.data?
 
-      data = @metric.data.map( (data_point) ->
-        data_point.value
-      )
+      labels = @metric.getDataLabels()
+
+      data = @metric.getDataPoints()
 
       @chart = new Chart(context).Line(
         labels : labels
@@ -36,5 +33,5 @@ class window.MetricChartView
       @$canvas.html("No data for this metric")
 
   getCanvas: ->
-    $("section##{@objective._id} #metric-#{@metric._id}")
+    $("section##{@objective._id} #metric-#{@metric.attributes._id}")
 
