@@ -4,7 +4,8 @@ class ProjectsControllerTest < ActionController::TestCase
 
   test ':index assigns all projects' do
     Project.
-      expects(:all).
+      expects(:view).
+      with(:all).
       returns([{
         "value" => {
           "_id" => 'anid',

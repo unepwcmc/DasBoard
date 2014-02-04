@@ -1,19 +1,6 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  test '#all returns only project documents' do
-    Couch::Db.post({type: "project"})
-    Couch::Db.post({type: "objective"})
-
-    projects = Project.all
-
-    assert_equal 1, projects.length,
-      "Expected only 1 Project to be returned"
-
-    project = projects[0]["value"]
-    assert_equal 'project', project["type"]
-  end
-
   test 'projects/with_nested_objectives returns the project objectives' do
     nrt_project = Couch::Db.post({name: "NRT", type: "project"})
     species_project = Couch::Db.post({name: "Species+", type: "project"})
