@@ -35,12 +35,12 @@ class MetricTest < ActiveSupport::TestCase
     data_point = {value: '4', date: '123'}
     metric.add_data_point(data_point)
 
-    assert_kind_of Array, metric.attributes[:data],
+    assert_kind_of Array, metric.attributes['data'],
       "Expected the metric to gain a data array"
 
-    assert_equal metric.attributes[:data].length, 1
+    assert_equal metric.attributes['data'].length, 1
 
-    added_point = metric.attributes[:data][0]
+    added_point = metric.attributes['data'][0]
     assert_equal data_point, added_point,
       "Expected the data point to be added correctly"
   end
@@ -48,7 +48,7 @@ class MetricTest < ActiveSupport::TestCase
   test ".add_data_point on a metric with an existing 'data' attribute
   creates the 'data' array and adds the given point data" do
     metric = Metric.new({
-      data: [{
+      'data' => [{
         value: '8',
         date: '456',
       }]
@@ -57,9 +57,9 @@ class MetricTest < ActiveSupport::TestCase
     data_point = {value: '4', date: '789'}
     metric.add_data_point(data_point)
 
-    assert_equal metric.attributes[:data].length, 2
+    assert_equal 2, metric.attributes['data'].length
 
-    added_point = metric.attributes[:data][1]
+    added_point = metric.attributes['data'][1]
     assert_equal data_point, added_point,
       "Expected the data point to be added correctly"
   end
