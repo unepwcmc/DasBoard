@@ -3,7 +3,11 @@ DasBoard::Application.routes.draw do
 
   resources :projects, only: ['index', 'show']
   resources :objectives, only: ['create']
-  resources :metrics, only: ['index']
+  resources :metrics, only: ['index'] do
+    member do
+      post 'data'
+    end
+  end
 
   if Rails.env.development?
     get "test", to: 'test#test'
