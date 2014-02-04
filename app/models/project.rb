@@ -1,9 +1,4 @@
-class Project
-  def self.all
-    results = Couch::Db.get('_design/projects/_view/all')
-    results["rows"]
-  end
-
+class Project < Couch::Model
   def self.find_with_nested_objectives key=nil
     query = '_design/projects/_view/with_objectives'
     if key.present?

@@ -1,6 +1,8 @@
 class MetricsController < ApplicationController
+  protect_from_forgery with: :null_session
+
   def index
-    render json: Metric.all
+    render json: Metric.view(:all)
   end
 
   def data

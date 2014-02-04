@@ -131,4 +131,38 @@ class Couch
       JSON.parse response.body
     end
   end
+
+  class Model
+    attr_accessor :attributes
+
+    def initialize attributes = {}
+      @attributes = attributes
+    end
+
+    def id
+      @attributes['_id']
+    end
+
+    def self.find id
+      attributes = Couch::Db.get(id)
+      return new(attributes)
+    end
+
+    def self.view view_name
+      pluralised_class_name = self.to_s.underscore.pluralize
+      url_encoded_class_name = URI.encode(pluralised_class_name, /\//)
+
+      results = Couch::Db.get("_design/#{url_encoded_class_name}/_view/#{view_name}")
+      results['rows']
+    end
+
+    def save
+      if id.nil?
+        response = Couch::Db.post(@attributes)
+      else
+        response = Couch::Db.put("/#{id}", @attributes)
+      end
+      @attributes['_rev'] = response['rev']
+    end
+  end
 end
