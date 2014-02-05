@@ -13,6 +13,21 @@
 
   <body>
 
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="/">Das Board</a></h1>
+        </li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Left Nav Section -->
+        <ul class="left">
+          <li><%= link_to "Projects", projects_path %></li>
+        </ul>
+      </section>
+    </nav>
+
     <div class="row">
       <%= yield %>
     </div>
