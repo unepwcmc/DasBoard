@@ -3,11 +3,13 @@ require 'json'
 
 class Couch
   def self.load_config
-    @@host = 'localhost'
-    @@port = '5984'
+    configs = YAML.load(File.read("#{Rails.root}/config/database.yml"))
+    config = configs[Rails.env]
 
-    env = Rails.env || 'development'
-    Couch::Db.set_db("das_board_#{env}")
+    @@host = config['host']
+    @@port = config['port'] || '5984'
+
+    Couch::Db.set_db(config['database'])
   end
 
   def self.base_url
