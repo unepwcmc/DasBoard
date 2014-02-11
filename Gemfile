@@ -23,3 +23,8 @@ gem 'foundation-rails'
 gem 'debugger'
 
 gem 'mocha'
+
+group :development do
+  gem 'capistrano'
+  gem 'brightbox'
+end
