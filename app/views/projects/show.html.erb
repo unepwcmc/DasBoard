@@ -4,7 +4,7 @@
   <section class="objective" id="<%= objective["_id"] %>">
     <h3><%= objective['name'] %></h3>
     <% if objective['metric'].present? %>
-      <canvas id="metric-<%= objective['metric']['_id'] %>" width="400" height="400">
+      <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
       </canvas>
     <% end %>
   </section>

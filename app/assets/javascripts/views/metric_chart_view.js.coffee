@@ -16,7 +16,7 @@ class window.MetricChartView
 
       data = @metric.getDataPoints()
 
-      @chart = new Chart(context).Line(
+      @chart = new Chart(context).Line({
         labels : labels
         datasets : [
           {
@@ -24,11 +24,13 @@ class window.MetricChartView
             strokeColor : "rgba(220,220,220,1)",
             pointColor : "rgba(220,220,220,1)",
             pointStrokeColor : "#fff",
-            bezierCurve: false,
             data : data
           }
         ]
-      )
+      },{
+        bezierCurve: false,
+        animation: false
+      })
     else
       @$canvas.html("No data for this metric")
 
