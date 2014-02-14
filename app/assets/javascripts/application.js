@@ -16,3 +16,8 @@
 //= require Chart.min
 //= require_tree ./models
 //= require_tree ./views
+//= require hover-editable
+
+$(function() {
+  window.window.window.window.HoverEditable.bindToEditables();
+});
