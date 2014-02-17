@@ -2,7 +2,9 @@
 
 <% @project['objectives'].each do |objective| %>
   <section class="objective" id="<%= objective["_id"] %>">
-    <h3 data-behavior="hover-edit"><%= objective['name'] %></h3>
+    <h3 data-behavior="hover-edit" data-model-id="<%= objective['_id'] %>" data-field-name="name">
+      <%= objective['name'] %>
+    </h3>
     <% if objective['metric'].present? %>
       <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
       </canvas>
