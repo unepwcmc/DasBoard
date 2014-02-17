@@ -69,6 +69,54 @@ class CouchModelTest < ActiveSupport::TestCase
       "Expected model to have updated the '_rev'"
   end
 
+  test ".update updates the model's attributes in Couch::Db" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"name" => "yep"})
+
+    assert_equal "yep", model.attributes['name'],
+      "Expected model name to be changed to 'yep'"
+
+    assert_equal "pey", model.attributes['type'],
+      "Expected model attribute 'type' to be untouched"
+  end
+
+  test ".update does not update the type" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"type" => "Sea horse"})
+
+    assert_equal "pey", model.attributes['type'],
+      "Expected model type to be untouched"
+  end
+
+  test ".update does not update the _id" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"_id" => "4321"})
+
+    assert_equal "1234", model.id,
+      "Expected model _id to be untouched"
+  end
+
   test "#view calls the given view in Couch::Db" do
     Couch::Db.expects(:get)
       .with("_design/couch%2Fmodels/_view/all")

@@ -136,6 +136,7 @@ class Couch
 
   class Model
     attr_accessor :attributes
+    UpdateBlacklist = ["_id", "type"]
 
     def initialize attributes = {}
       @attributes = attributes
@@ -165,6 +166,11 @@ class Couch
         response = Couch::Db.put("/#{id}", @attributes)
       end
       @attributes['_rev'] = response['rev']
+    end
+
+    def update new_attributes
+      @attributes = @attributes.merge(new_attributes.except(*Model::UpdateBlacklist))
+      self.save
     end
   end
 end
