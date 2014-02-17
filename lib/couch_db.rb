@@ -1,5 +1,6 @@
 require 'v8'
 require 'json'
+require 'securerandom'
 
 class Couch
   def self.load_config
@@ -140,6 +141,7 @@ class Couch
 
     def initialize attributes = {}
       @attributes = attributes
+      @attributes['_id'] ||= SecureRandom.uuid
     end
 
     def id
@@ -160,11 +162,7 @@ class Couch
     end
 
     def save
-      if id.nil?
-        response = Couch::Db.post(@attributes)
-      else
-        response = Couch::Db.put("/#{id}", @attributes)
-      end
+      response = Couch::Db.put("/#{id}", @attributes)
       @attributes['_rev'] = response['rev']
     end
 
