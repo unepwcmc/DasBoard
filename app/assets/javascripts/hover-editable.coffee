@@ -89,7 +89,7 @@ class EditField
 
     $.ajax(
       type: "PUT",
-      url: "/models/#{modelId}/update"
+      url: "/models/#{modelId}"
       data: data
     ).success(->
     ).fail(->
