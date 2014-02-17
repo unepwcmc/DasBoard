@@ -84,8 +84,8 @@ class EditField
     modelId = @$el.attr('data-model-id')
     fieldName = @$el.attr('data-field-name')
 
-    data = {}
-    data[fieldName] = @$el.text()
+    data = {model: {}}
+    data.model[fieldName] = @$el.text()
 
     $.ajax(
       type: "PUT",

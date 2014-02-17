@@ -9,6 +9,8 @@ DasBoard::Application.routes.draw do
     end
   end
 
+  resources :models, only: ['update']
+
   if Rails.env.development?
     get "test", to: 'test#test'
   end
