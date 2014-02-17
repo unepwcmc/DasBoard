@@ -1,5 +1,6 @@
 require 'v8'
 require 'json'
+require 'securerandom'
 
 class Couch
   def self.load_config
@@ -136,9 +137,11 @@ class Couch
 
   class Model
     attr_accessor :attributes
+    UpdateBlacklist = ["_id", "type"]
 
     def initialize attributes = {}
       @attributes = attributes
+      @attributes['_id'] ||= SecureRandom.uuid
     end
 
     def id
@@ -159,12 +162,13 @@ class Couch
     end
 
     def save
-      if id.nil?
-        response = Couch::Db.post(@attributes)
-      else
-        response = Couch::Db.put("/#{id}", @attributes)
-      end
+      response = Couch::Db.put("/#{id}", @attributes)
       @attributes['_rev'] = response['rev']
+    end
+
+    def update new_attributes
+      @attributes = @attributes.merge(new_attributes.except(*Model::UpdateBlacklist))
+      self.save
     end
   end
 end

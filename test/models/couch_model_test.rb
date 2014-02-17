@@ -1,20 +1,37 @@
 require 'test_helper'
 
 class CouchModelTest < ActiveSupport::TestCase
-  test '#initialize sets the attributes instance variable' do
+  test '#new sets the attributes instance variable' do
     attributes = {o: 'hai'}
     model = Couch::Model.new(attributes)
 
     assert_equal attributes, model.attributes
   end
 
-  test '#initialize sets the attributes instance variable to an empty hash if
+  test '#new sets the attributes instance variable to an empty hash if
    no attributes are given' do
     model = Couch::Model.new()
 
-    assert_equal({}, model.attributes)
+    assert_kind_of Hash, model.attributes
   end
 
+  test "#new generates a random UUID if the attributes lack an '_id'" do
+    model = Couch::Model.new()
+
+    assert_not_nil model.id
+
+    assert_equal 36, model.id.length
+  end
+
+  test "#new does not replace the '_id' attribute if one is specified" do
+    theId = 54
+    model = Couch::Model.new({
+      "_id" => theId
+    })
+
+    assert_equal theId, model.id
+  end
+  
   test '.id returns the _id attribute' do
     model = Couch::Model.new({'_id' => 1})
     assert_equal 1, model.id
@@ -59,14 +76,62 @@ class CouchModelTest < ActiveSupport::TestCase
       'name' => 'Total uptime'
     })
 
-    Couch::Db.expects(:post)
-      .with(model.attributes)
+    Couch::Db.expects(:put)
+      .with("/#{model.id}", model.attributes)
       .returns({"rev" => 1})
 
     model.save()
 
     assert_equal 1, model.attributes['_rev'],
       "Expected model to have updated the '_rev'"
+  end
+
+  test ".update updates the model's attributes in Couch::Db" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"name" => "yep"})
+
+    assert_equal "yep", model.attributes['name'],
+      "Expected model name to be changed to 'yep'"
+
+    assert_equal "pey", model.attributes['type'],
+      "Expected model attribute 'type' to be untouched"
+  end
+
+  test ".update does not update the type" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"type" => "Sea horse"})
+
+    assert_equal "pey", model.attributes['type'],
+      "Expected model type to be untouched"
+  end
+
+  test ".update does not update the _id" do
+    model = Couch::Model.new({
+      "_id" => '1234',
+      "name" => 'yep',
+      "type" => 'pey'
+    })
+
+    model.expects(:save).returns(true)
+
+    model.update({"_id" => "4321"})
+
+    assert_equal "1234", model.id,
+      "Expected model _id to be untouched"
   end
 
   test "#view calls the given view in Couch::Db" do
