@@ -13,16 +13,12 @@ class ModelsControllerTest < ActionController::TestCase
 
     Couch::Db.expects(:get)
       .with(model_id)
-      .returns({"rows" => [model_attrs]})
+      .returns(model_attrs)
 
     Metric.expects(:new)
       .with(model_attrs)
-      .returns( Struct.new("Metric", :updated_attrs) {
+      .returns( Struct.new("Metric", :attributes) {
         def update attrs
-        end
-
-        def to_json options
-          return updated_attrs.to_json
         end
       }.new(updated_model_attrs) )
 
