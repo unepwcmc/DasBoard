@@ -9,25 +9,43 @@ class window.window.HoverEditable
     )
 
   @showEditTab: ->
+    HoverEditable.closeExistingTab()
     HoverEditable.currentHoverTab = new HoverTab($(@))
 
   @hideEditTab: ->
-    HoverEditable.currentHoverTab.close()
+    HoverEditable.timeout = setTimeout(->
+      HoverEditable.currentHoverTab.close()
+    , 200)
+
+  @closeExistingTab: ->
+    if HoverEditable.timeout?
+      clearTimeout(HoverEditable.timeout)
+
+    if HoverEditable.currentHoverTab?
+      HoverEditable.currentHoverTab.close()
+
 
 class HoverTab
   constructor: (@$target) ->
     @render()
     @setPosition()
+    @hovering = false
 
   render: ->
-    @$el = $("<div width='50px'>Edit</div>")
+    @$el = $("<div class='hover-edit-tab'>Edit</div>")
     $('body').append(@$el)
+    @$el.hover(
+      (=> @hovered = true),
+      (=> @hovered = false)
+    )
 
   setPosition: ->
     offset = @$target.offset()
     offset.left = offset.left - 50
-    console.log offset
     @$el.offset(offset)
 
-  close: ->
-    @$el.remove()
+  close: =>
+    if @hovered
+      @$el.mouseout(@close)
+    else
+      @$el.remove()
