@@ -24,7 +24,6 @@ class window.window.HoverEditable
     if HoverEditable.currentHoverTab?
       HoverEditable.currentHoverTab.close()
 
-
 class HoverTab
   constructor: (@$target) ->
     @render()
@@ -38,6 +37,10 @@ class HoverTab
       (=> @hovered = true),
       (=> @hovered = false)
     )
+    @$el.click(@createEditView)
+
+  createEditView: =>
+    new EditField(@$target)
 
   setPosition: ->
     offset = @$target.offset()
@@ -49,3 +52,27 @@ class HoverTab
       @$el.mouseout(@close)
     else
       @$el.remove()
+
+class EditField
+  constructor: (@$el)->
+    @previousValue = @$el.text()
+    @render()
+
+  render: ->
+    @$el.attr('contenteditable', true)
+    @$el.focus()
+    @$editControls = @createEditControls()
+    @$el.after(@$editControls)
+    @$editControls.find('a').click(@restoreAndClose)
+
+  createEditControls: ->
+    $("""
+      <div>
+        <input type='submit' value='Save'><a href='#'>cancel</a>
+     </div>
+    """)
+
+  restoreAndClose: =>
+    @$el.text(@previousValue)
+    @$el.attr('contenteditable', false)
+    @$editControls.remove()
