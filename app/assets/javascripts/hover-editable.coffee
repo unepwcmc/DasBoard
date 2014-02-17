@@ -77,8 +77,7 @@ class EditField
 
   restoreAndClose: =>
     @$el.text(@previousValue)
-    @$el.attr('contenteditable', false)
-    @$editControls.remove()
+    @close()
 
   saveUpdate: =>
     modelId = @$el.attr('data-model-id')
@@ -91,7 +90,12 @@ class EditField
       type: "PUT",
       url: "/models/#{modelId}"
       data: data
-    ).success(->
+    ).success(
+      @close
     ).fail(->
-      alert('ooop')
+      alert('Error updating, please reload the page')
     )
+
+  close: =>
+    @$el.attr('contenteditable', false)
+    @$editControls.remove()
