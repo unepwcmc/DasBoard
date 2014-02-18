@@ -1,16 +1,11 @@
 <%= editable_tag(@project, 'name', :h2)%>
 
 
-<% @project['objectives'].each do |objective| %>
-  <section class="objective" id="<%= objective["_id"] %>">
-    <%= editable_tag(objective, 'name', :h3)%>
-
-    <% if objective['metric'].present? %>
-      <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
-      </canvas>
-    <% end %>
-  </section>
-<% end %>
+<div id="objectives">
+  <% @project['objectives'].each do |objective| %>
+    <%= render partial: "objectives/objective", locals: {objective: objective} %>
+  <% end %>
+</div>
 
 <button id="add-objective" data-project-id="<%= @project['_id'] %>">
   Add objective

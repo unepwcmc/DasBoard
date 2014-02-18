@@ -1,0 +1,8 @@
+<section class="objective" id="<%= objective["_id"] %>">
+  <%= editable_tag(objective, 'name', :h3)%>
+
+  <% if objective['metric'].present? %>
+    <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
+    </canvas>
+  <% end %>
+</section>
