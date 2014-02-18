@@ -32,10 +32,7 @@
         end
       %>
 
-      $('#add-objective').click(function(event) {
-        var projectId = $(event.target).attr('data-project-id');
-        new AddObjectiveView(projectId);
-      });
+      $('#add-objective').click(window.DasBoard.addObjective);
     });
   </script>
 <% end %>

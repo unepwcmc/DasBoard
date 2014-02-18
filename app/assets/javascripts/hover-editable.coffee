@@ -3,9 +3,11 @@ class window.window.HoverEditable
   currentHoverTab: null
 
   @bindToEditables: ->
-    $('[data-behavior="hover-edit"]').hover(
-      HoverEditable.showEditTab,
-      HoverEditable.hideEditTab
+    $("body").on(
+      'mouseenter', '[data-behavior="hover-edit"]', HoverEditable.showEditTab
+    )
+    $("body").on(
+      'mouseleave', '[data-behavior="hover-edit"]', HoverEditable.hideEditTab
     )
 
   @showEditTab: ->
