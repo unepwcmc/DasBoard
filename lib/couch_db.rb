@@ -9,6 +9,8 @@ class Couch
 
     @@host = config['host']
     @@port = config['port'] || '5984'
+    @@username = config['username']
+    @@password = config['password']
 
     Couch::Db.set_db(config['database'])
   end
@@ -22,6 +24,11 @@ class Couch
       faraday.request  :url_encoded             # form-encode POST params
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
+
+    if @@username.present? && @@password.present?
+      conn.basic_auth(@@username, @@password)
+    end
+
     conn
   end
 
