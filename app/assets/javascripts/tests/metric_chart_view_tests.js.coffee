@@ -28,3 +28,11 @@ test(".getCanvas returns the correct selector", ->
   finally
     window.$ = $Backup
 )
+
+test('.render does not throw exception if canvas does not exist', sinon.test(->
+  @stub(MetricChartView::, 'getCanvas', -> [])
+
+  assert.doesNotThrow( (->
+    view = new MetricChartView({}, {})
+  ), TypeError, 'Expected render to not throw exception when Canvas el does not exist')
+))
