@@ -17,6 +17,7 @@
 //= require_tree ./models
 //= require_tree ./views
 //= require hover-editable
+//= require new-objective
 
 $(function() {
   window.window.window.window.HoverEditable.bindToEditables();
