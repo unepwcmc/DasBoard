@@ -16,8 +16,9 @@
 //= require Chart.min
 //= require_tree ./models
 //= require_tree ./views
-//= require hover-editable
-//= require new-objective
+//= require edit_field
+//= require hover_editable
+//= require new_objective
 
 $(function() {
   window.window.window.window.HoverEditable.bindToEditables();

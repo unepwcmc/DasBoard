@@ -8,6 +8,8 @@ class window.MetricChartView
   render: ->
     @$canvas = @getCanvas()
 
+    return if @$canvas.length is 0
+
     context = @$canvas.get(0).getContext("2d")
 
     if @metric.attributes.data?

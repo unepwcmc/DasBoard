@@ -15,3 +15,5 @@ renderNewObjective = (response) ->
   newObjectiveEl = $(response)
   $("#objectives").append(newObjectiveEl)
 
+  objectiveNameEl = $(newObjectiveEl.find('h3'))
+  new EditField(objectiveNameEl)
