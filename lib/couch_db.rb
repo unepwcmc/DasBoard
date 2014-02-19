@@ -25,7 +25,7 @@ class Couch
       faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
-    if @@username.present? && @@password.present?
+    if @@username.empty? && @@password.empty?
       conn.basic_auth(@@username, @@password)
     end
 
