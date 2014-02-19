@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ObjectivesControllerTest < ActionController::TestCase
 
-  test ":new creates a new objective on the given project"  do
+  test "GET :new creates a new objective on the given project"  do
     project_id = "5f43"
     get :new, id: project_id
 
@@ -15,6 +15,25 @@ class ObjectivesControllerTest < ActionController::TestCase
       "Expected the objective to be of type 'objective'"
     assert_equal project_id, new_objective.attributes['project_id'],
       "Expected the new objective to be associated to the given project"
+  end
+
+  test "GET :new assigns the list of metrics" do
+    metrics = [{"value" => {
+      "name" => "Anne metric"
+    }}]
+
+    Metric.expects(:view)
+      .with('all')
+      .returns(metrics)
+
+    get :new, id: 'anID'
+
+    assigned_metrics = assigns(:metrics)
+    expected_metrics = metrics.map{|m|m["value"]}
+
+    assert_not_nil assigned_metrics
+
+    assert_equal expected_metrics, assigned_metrics
   end
 
 end

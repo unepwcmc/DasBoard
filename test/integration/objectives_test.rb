@@ -3,7 +3,6 @@ require 'test_helper'
 class ObjectivesTest < ActionDispatch::IntegrationTest
 
   test "/project/:id/objectives/new renders the objective view for a new objective" do
-
     get '/projects/3434/objectives/new'
 
     assert_response :success
@@ -13,6 +12,12 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
         text: "New Objective"
       }
     end
+
+    assert_select ".objective", {
+      text: /No metric selected/
+    }
+
+    assert_template partial: "_select_metric"
   end
 
 end

@@ -9,6 +9,8 @@ class ProjectsController < ApplicationController
     result = Project.find_with_nested_objectives(id)
     @project = result[0]['value']
     Project.populate_metrics_on_objectives!(@project)
+
+    @metrics = Metric.view('all').map {|m| m["value"]}
   end
 
 end

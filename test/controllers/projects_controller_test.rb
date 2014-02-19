@@ -49,4 +49,31 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'An project', assigned_project['name']
   end
 
+  test ':show assigns a list of metrics' do
+    project_json = {
+      "_id" => "123",
+      "type" => "project",
+      "objectives" => []
+    }
+    Project.expects(:find_with_nested_objectives).
+      with('123').
+      returns([{
+        "value" => project_json
+      }])
+
+
+    metrics = [{"value" => {name: "Fancy banana"}}]
+    expected_metrics = metrics.map{|m|m["value"]}
+
+    Metric.expects(:view)
+      .with('all')
+      .returns(metrics)
+
+    get :show, id: '123'
+
+    assigned_metrics = assigns(:metrics)
+    assert_not_nil assigned_metrics, "Expected @metrics to be assigned"
+    assert_equal assigned_metrics, expected_metrics
+  end
+
 end

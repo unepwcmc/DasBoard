@@ -1,0 +1,3 @@
+<%= select_tag :choose_metric, options_for_select(
+  hash_array_to_select_collection(metrics, "_id", "name")
+) %>

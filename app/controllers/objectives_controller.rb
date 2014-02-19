@@ -8,6 +8,8 @@ class ObjectivesController < ApplicationController
     })
     @objective.save
 
+    @metrics = Metric.view('all').map {|m| m["value"]}
+
     render layout: false
   end
 
