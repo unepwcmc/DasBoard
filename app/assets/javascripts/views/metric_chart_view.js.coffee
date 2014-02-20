@@ -1,12 +1,13 @@
 class window.MetricChartView
-  constructor: (@objective, @metric) ->
+  constructor: (@$el, @metric) ->
     unless @metric?
       throw new Error("No metric provided, can't create MetricChartView")
 
     @render()
 
   render: ->
-    @$canvas = @getCanvas()
+    @$canvas = $('<canvas></canvas>')
+    @$el.html(@$canvas)
 
     return if @$canvas.length is 0
 
@@ -35,7 +36,3 @@ class window.MetricChartView
       })
     else
       @$canvas.html("No data for this metric")
-
-  getCanvas: ->
-    $("section##{@objective._id} #metric-#{@metric.attributes._id}")
-

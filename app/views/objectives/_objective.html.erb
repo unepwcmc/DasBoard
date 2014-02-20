@@ -1,11 +1,16 @@
 <section class="objective" id="<%= objective["_id"] %>">
   <%= editable_tag(objective, 'name', :h3)%>
 
-  <% if objective['metric'].present? %>
-    <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
-    </canvas>
-  <% else %>
-    No metric selected
-    <%= render partial: 'objectives/select_metric', locals: {metrics: @metrics} %>
-  <% end %>
+  <div class="metric">
+    <% if objective['metric'].present? %>
+      <canvas id="metric-<%= objective['metric']['_id'] %>" width="800" height="400">
+      </canvas>
+    <% else %>
+      No metric selected
+      <%= render partial: 'objectives/select_metric', locals: {
+        objective: objective,
+        metrics: @metrics
+      } %>
+    <% end %>
+  </div>
 </section>

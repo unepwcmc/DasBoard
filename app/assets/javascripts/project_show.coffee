@@ -3,19 +3,23 @@ window.DasBoard ||= {}
 class window.DasBoard.ProjectShowController
   constructor: (@objectives) ->
     $('#add-objective').click(@addObjective)
-    $('body').on('ajax:success', '.objective-metric-form', @saveObjectiveMetric)
+    $('body').on('ajax:success', '.objective-metric-form', @showChangedMetric)
 
     @createMetricCharts()
 
-  reloadObjectiveMetric: (event, data, status, xhr) ->
+  showChangedMetric: (event, data, status, xhr) ->
     $formEl = $(event.target)
-    $objectiveEl = $formEl.parents('')
+    $metricEl = $formEl.parents('.metric')
+
+    new MetricChartView($metricEl, new Metric(data.metric))
 
   createMetricCharts: ->
     for objective in @objectives
       if objective.metric
+        $metricEl = $("#{objective._id}").find('.metric')
+
         new MetricChartView(
-          objective,
+          $metricEl,
           new Metric(objective.metric)
         )
 
