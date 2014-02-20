@@ -4,7 +4,7 @@ A Dashboard to allow drafting objectives for projects, then evaluating them base
 # Setup
 ## Persistence
 The application uses [CouchDB](https://en.wikipedia.org/wiki/CouchDB) for persistence. Install it with your package manager of choice.
-CouchDB is a NoSQL store, which you query using map/reduce functions. These map/reduce functions are store in in design views in the database.  Queries are performed over HTTP.
+CouchDB is a NoSQL store, which you query using map/reduce functions. These map/reduce functions are stored in design views in the database. Queries are performed over HTTP.
 
 ## Our CouchDB wrapper
 As such, we've ditched ActiveRecord, and replaced it with our own lightweight wrapper.
