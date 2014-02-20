@@ -1,27 +1,5 @@
 class Project < ActiveRecord::Base
-  def self.find_with_nested_objectives key=nil
-    query = '_design/projects/_view/with_objectives'
-    if key.present?
-      query += "?startkey=[\"#{key}\", null]&endkey=[\"#{key}\", {}]"
-    end
-
-    results = Couch::Db.get(query)
-
-    projects = []
-    results['rows'].each do |result|
-      if result['key'][1] == 0
-        # Project
-        project = result
-        project['value']['objectives'] = []
-        projects.push project
-      else
-        # Objective
-        projects.last['value']['objectives'].push result['value']
-      end
-    end
-
-    projects
-  end
+  has_many :objectives
 
   def self.populate_metrics_on_objectives! project
     metric_ids = project['objectives'].map{|objective|

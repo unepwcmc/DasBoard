@@ -2,14 +2,14 @@ class MetricsController < ApplicationController
   protect_from_forgery with: :null_session
 
   def index
-    render json: Metric.view(:all)
+    render json: Metric.all
   end
 
   def data
     metric = Metric.find params[:id]
     metric.add_data_point(params[:data])
-    metric.save
+    metric.save!
 
-    render json: metric.attributes
+    render json: metric
   end
 end

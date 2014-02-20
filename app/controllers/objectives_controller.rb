@@ -1,27 +1,25 @@
 class ObjectivesController < ApplicationController
 
   def new
-    @objective = Objective.new({
+    @objective = Objective.create({
       "name" => "New Objective",
-      "type" => "objective",
       "project_id" => params[:id]
     })
-    @objective.save
 
-    @metrics = Metric.view('all').map {|m| m["value"]}
+    @metrics = Metric.all
 
     render layout: false
   end
 
   def update
     objective = Objective.find(params[:id])
-    objective.update({
-      metric_id: params[:metric_id]
-    })
+    objective.metric_id = params[:metric_id]
+    objective.save
 
-    objective.attributes[:metric] = Metric.find(params[:metric_id]).attributes
+    objectiveJSON = objective.attributes
+    objectiveJSON[:metric] = objective.metric.attributes
 
-    render json: objective.attributes
+    render json: objectiveJSON
   end
 
   def create
