@@ -11,10 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140220114309) do
+ActiveRecord::Schema.define(version: 20140220115005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "metrics", force: true do |t|
+    t.string "name"
+    t.json   "data", default: []
+  end
+
+  create_table "objectives", force: true do |t|
+    t.string  "name"
+    t.integer "metric_id"
+    t.integer "project_id"
+  end
+
+  add_index "objectives", ["metric_id"], name: "index_objectives_on_metric_id", using: :btree
+  add_index "objectives", ["project_id"], name: "index_objectives_on_project_id", using: :btree
 
   create_table "projects", force: true do |t|
     t.string "name"
