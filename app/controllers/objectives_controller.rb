@@ -13,11 +13,14 @@ class ObjectivesController < ApplicationController
 
   def update
     objective = Objective.find(params[:id])
-    objective.metric_id = params[:metric_id]
+    objective.update_attributes(objective_params)
     objective.save
 
     objectiveJSON = objective.attributes
-    objectiveJSON[:metric] = objective.metric.attributes
+
+    if objective.metric
+      objectiveJSON[:metric] = objective.metric.attributes
+    end
 
     render json: objectiveJSON
   end
@@ -26,4 +29,9 @@ class ObjectivesController < ApplicationController
     render json: Couch::Db.post(params[:objective])
   end
 
+  private
+
+  def objective_params
+    params.permit(:metric_id, :name)
+  end
 end

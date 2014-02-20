@@ -45,4 +45,14 @@ class ObjectivesControllerTest < ActionController::TestCase
     assert_equal metric.id, updated_objective.attributes['metric_id']
   end
 
+  test "PUT /objectives/:id updates the objective name" do
+    objective = Objective.new()
+    objective.save
+
+    put :update, id: objective.id, name: "test"
+
+    updated_objective = Objective.find(objective.id)
+
+    assert_equal "test", updated_objective.name
+  end
 end
