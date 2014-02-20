@@ -24,14 +24,15 @@ class window.EditField
 
   saveUpdate: =>
     modelId = @$el.attr('data-model-id')
+    modelType = @$el.attr('data-model-type')
     fieldName = @$el.attr('data-field-name')
 
-    data = {model: {}}
-    data.model[fieldName] = @$el.text()
+    data = {}
+    data[fieldName] = @$el.text()
 
     $.ajax(
       type: "PUT",
-      url: "/models/#{modelId}"
+      url: "/#{modelType}/#{modelId}"
       data: data
     ).success(
       @close

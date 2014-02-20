@@ -4,19 +4,20 @@ class ProjectHelperTest < ActionView::TestCase
 
   test "#editable_tag given a model and attribute name generates the correct
   data attribute tags" do
-    objective_attrs = {
-      "_id" => 54,
-      "name" => "Lovely"
-    }
+    objective = Objective.new({
+      id: 54,
+      name: "Lovely"
+    })
 
     self.expects(:content_tag)
-      .with(:h3, objective_attrs['name'], {
+      .with(:h3, objective.name, {
         "data-behavior" => "hover-edit",
-        "data-model-id" => objective_attrs['_id'],
+        "data-model-id" => objective.id,
+        "data-model-type" => 'objectives',
         "data-field-name" => 'name'
       }).returns('HTML')
 
-    html = editable_tag objective_attrs, 'name', :h3
+    html = editable_tag objective, 'name', :h3
 
     assert_kind_of String, html
   end
