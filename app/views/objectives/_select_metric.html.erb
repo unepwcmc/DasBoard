@@ -1,3 +1,6 @@
-<%= select_tag :choose_metric, options_for_select(
-  hash_array_to_select_collection(metrics, "_id", "name")
-) %>
+<%= form_tag objective_path(objective['_id']), method: "PUT", remote: true do %>
+  <%= select_tag :metric_id, options_for_select(
+    hash_array_to_select_collection(metrics, "_id", "name")
+  ) %>
+  <%= submit_tag %>
+<% end %>

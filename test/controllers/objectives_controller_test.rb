@@ -36,4 +36,22 @@ class ObjectivesControllerTest < ActionController::TestCase
     assert_equal expected_metrics, assigned_metrics
   end
 
+  test "PUT /objectives/:id updates the objective" do
+    objective = Objective.new(metric_id: nil)
+    objective.save
+
+    metric = Metric.new()
+    metric_id = metric.id
+
+    Metric.expects(:find)
+      .with(metric_id)
+      .returns(metric)
+
+    put :update, id: objective.id, metric_id: metric_id
+
+    updated_objective = Objective.find(objective.id)
+
+    assert_equal metric_id, updated_objective.attributes['metric_id']
+  end
+
 end

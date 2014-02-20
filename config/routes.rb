@@ -7,7 +7,7 @@ DasBoard::Application.routes.draw do
     end
   end
 
-  resources :objectives, only: ['create']
+  resources :objectives, only: ['create', 'update']
   resources :metrics, only: ['index'] do
     member do
       post 'data'
