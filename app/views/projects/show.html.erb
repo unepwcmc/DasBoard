@@ -14,20 +14,8 @@
 <% content_for :javascript do %>
   <script>
     $(function() {
-      <%
-        @project['objectives'].each do |objective|
-          if objective['metric']
-      %>
-            new MetricChartView(
-              <%= objective.to_json.html_safe %>,
-              new Metric(<%= objective['metric'].to_json.html_safe %>)
-            );
-      <%
-          end 
-        end
-      %>
-
-      $('#add-objective').click(window.DasBoard.addObjective);
+      var objectives = <%= @project['objectives'].to_json.html_safe %>;
+      new window.DasBoard.ProjectShowController(objectives);
     });
   </script>
 <% end %>
