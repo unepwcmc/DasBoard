@@ -53,4 +53,13 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal assigned_metrics.first, metrics.first
   end
 
+  test "PUT /project/:id updates the project" do
+    project = Project.create(name: "a crappy name")
+
+    put :update, id: project.id, name: "a much better name"
+
+    updated_project = Project.find(project.id)
+
+    assert_equal "a much better name", updated_project.name
+  end
 end
