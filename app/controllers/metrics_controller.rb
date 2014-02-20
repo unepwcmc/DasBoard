@@ -8,7 +8,7 @@ class MetricsController < ApplicationController
   def data
     metric = Metric.find params[:id]
     metric.add_data_point(params[:data])
-    metric.save!
+    metric.save
 
     render json: metric
   end
