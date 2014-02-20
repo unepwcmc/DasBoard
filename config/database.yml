@@ -1,13 +1,13 @@
 development:
+  adapter: postgresql
   database: das_board_development
-  port: 5984
   username: postgres
-  password: postgres
+  password:
   host: localhost
 
 test:
+  adapter: postgresql
   database: das_board_test
-  port: 5984
   username: postgres
-  password: postgres
+  password:
   host: localhost

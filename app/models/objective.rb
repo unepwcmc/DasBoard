@@ -1,2 +1,2 @@
-class Objective < Couch::Model
+class Objective < ActiveRecord::Base
 end

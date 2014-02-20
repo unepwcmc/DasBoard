@@ -1,4 +1,4 @@
-class Project < Couch::Model
+class Project < ActiveRecord::Base
   def self.find_with_nested_objectives key=nil
     query = '_design/projects/_view/with_objectives'
     if key.present?
