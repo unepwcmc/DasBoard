@@ -3,10 +3,19 @@ window.DasBoard ||= {}
 class window.DasBoard.ProjectShowController
   constructor: (@objectiveMetrics) ->
     $('#add-objective').click(@addObjective)
-    $('body').on('ajax:success', '.objective-metric-form', @showChangedMetric)
-    $('body').on('ajax:error', '.objective-metric-form', @updateMetricError)
 
+    @setupBindings()
     @createMetricCharts()
+
+  setupBindings: ->
+    $('body').on('ajax:success', '.objective-metric-form', @showChangedMetric)
+    $('body').on('ajax:success', '.delete-objective', @removeObjective)
+
+    $('body').on(
+      'ajax:error',
+      '.objective-metric-form .delete-objective',
+      @updateError
+    )
 
   showChangedMetric: (event, data, status, xhr) ->
     $formEl = $(event.target)
@@ -14,9 +23,12 @@ class window.DasBoard.ProjectShowController
 
     new MetricChartView($metricEl, new Metric(data.metric))
 
-  updateMetricError: (event, data, status, xhr) ->
+  removeObjective: (event, data) ->
+    $("#objective-#{data.id}").remove()
+
+  updateError: (event, data, status, xhr) ->
     console.log data
-    alert('Error saving metric, please reload the page')
+    alert('Error saving, please reload the page')
 
   createMetricCharts: ->
     for objectiveId, metric of @objectiveMetrics
