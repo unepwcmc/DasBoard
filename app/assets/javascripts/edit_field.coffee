@@ -35,7 +35,7 @@ class window.EditField
       type: "PUT",
       url: url
       data: JSON.stringify(data)
-      dataType: 'json'
+      contentType: 'application/json'
     ).success(
       @close
     ).fail(->
