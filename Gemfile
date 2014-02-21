@@ -22,6 +22,11 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'foundation-rails'
 
-gem 'debugger'
+group :development do
+  gem 'debugger'
+  gem 'capistrano', '~> 2.15.5'
+  gem 'capistrano-ext'
+  gem 'brightbox'
+end
 
 gem 'mocha'
