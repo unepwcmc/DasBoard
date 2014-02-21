@@ -1,11 +1,6 @@
 # DasBoard
 A Dashboard to allow drafting objectives for projects, then evaluating them based on visualisations of metrics.
 
-# Setup
-## Persistence
-The application uses [CouchDB](https://en.wikipedia.org/wiki/CouchDB) for persistence. Install it with your package manager of choice.
-CouchDB is a NoSQL store, which you query using map/reduce functions. These map/reduce functions are stored in design views in the database. Queries are performed over HTTP.
-
 # Testing
 Tests are keeping it simple. Written in MiniTest, using Mocha for mocking etc. Our TDD approach is something along the lines of:
 
