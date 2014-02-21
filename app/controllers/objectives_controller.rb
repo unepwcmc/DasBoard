@@ -32,6 +32,6 @@ class ObjectivesController < ApplicationController
   private
 
   def objective_params
-    params.permit(:metric_id, :name)
+    params.require(:objective).permit(:metric_id, :name)
   end
 end

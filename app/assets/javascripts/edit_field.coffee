@@ -28,7 +28,8 @@ class window.EditField
     fieldName = @$el.attr('data-field-name')
 
     data = {}
-    data[fieldName] = @$el.text()
+    data[modelType] = {}
+    data[modelType][fieldName] = @$el.text()
 
     $.ajax(
       type: "PUT",

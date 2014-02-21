@@ -38,7 +38,7 @@ class ObjectivesControllerTest < ActionController::TestCase
 
     metric = Metric.create()
 
-    put :update, id: objective.id, metric_id: metric.id
+    put :update, id: objective.id, objective: {metric_id: metric.id}
 
     updated_objective = Objective.find(objective.id)
 
@@ -49,7 +49,7 @@ class ObjectivesControllerTest < ActionController::TestCase
     objective = Objective.new()
     objective.save
 
-    put :update, id: objective.id, name: "test"
+    put :update, id: objective.id, objective: {name: "test"}
 
     updated_objective = Objective.find(objective.id)
 
