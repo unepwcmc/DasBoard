@@ -20,6 +20,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.permit(:name)
+    params[:project].permit(:name)
   end
 end

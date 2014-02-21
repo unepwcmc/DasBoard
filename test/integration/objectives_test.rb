@@ -29,7 +29,7 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
 
     metric = Metric.create(name: "an metric")
 
-    put "/objectives/#{objective.id}", metric_id: metric.id
+    put "/objectives/#{objective.id}", objective: {metric_id: metric.id}
 
     updated_objective = JSON.parse(response.body)
 

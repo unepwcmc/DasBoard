@@ -56,7 +56,7 @@ class ProjectsControllerTest < ActionController::TestCase
   test "PUT /project/:id updates the project" do
     project = Project.create(name: "a crappy name")
 
-    put :update, id: project.id, name: "a much better name"
+    put :update, id: project.id, project: { name: "a much better name" }
 
     updated_project = Project.find(project.id)
 
