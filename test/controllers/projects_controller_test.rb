@@ -19,13 +19,15 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test ':show assigns the project with nested metrics' do
+    project_id = '123'
     Project.expects(:find)
-      .with('123')
+      .with(project_id)
       .returns(Project.new({
+        id: project_id,
         name: "An project"
       }))
 
-    get :show, id: '123'
+    get :show, id: project_id
 
     assert_response :success
 
@@ -35,16 +37,17 @@ class ProjectsControllerTest < ActionController::TestCase
   end
 
   test ':show assigns a list of metrics' do
+    project_id = '123'
     Project.expects(:find).
-      with('123').
-      returns(Project.new)
+      with(project_id).
+      returns(Project.new(id: project_id))
 
     metrics = [Metric.new({name: "Fancy banana"})]
 
     Metric.expects(:all)
       .returns(metrics)
 
-    get :show, id: '123'
+    get :show, id: project_id
 
     assigned_metrics = assigns(:metrics)
     assert_not_nil assigned_metrics, "Expected @metrics to be assigned"
