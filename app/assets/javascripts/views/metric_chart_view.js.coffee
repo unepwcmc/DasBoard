@@ -6,17 +6,13 @@ class window.MetricChartView
     @render()
 
   render: ->
-    @$canvas = $('<canvas></canvas>')
+    @$canvas = $('<canvas width=900 height=562></canvas>')
     @$el.html(@$canvas)
-
-    return if @$canvas.length is 0
 
     context = @$canvas.get(0).getContext("2d")
 
     if @metric.attributes.data?
-
       labels = @metric.getDataLabels()
-
       data = @metric.getDataPoints()
 
       @chart = new Chart(context).Line({
