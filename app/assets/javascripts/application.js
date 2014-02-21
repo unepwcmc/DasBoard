@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require handlebarz
-//= require Chart.min
+//= require Chart
 //= require_tree ./models
 //= require_tree ./views
 //= require project_show
