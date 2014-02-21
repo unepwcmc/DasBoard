@@ -13,8 +13,11 @@
 <% content_for :javascript do %>
   <script>
     $(function() {
-      var objectives = <%= @project.objectives.to_json.html_safe %>;
-      new window.DasBoard.ProjectShowController(objectives);
+      var objectiveMetrics = {};
+      <% @project.objectives.each do |objective| %>
+        objectiveMetrics[<%= objective.id %>] = <%= objective.metric.to_json.html_safe %>;
+      <% end %>
+      new window.DasBoard.ProjectShowController(objectiveMetrics);
     });
   </script>
 <% end %>
