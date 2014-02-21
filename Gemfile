@@ -27,6 +27,7 @@ group :development do
   gem 'capistrano', '~> 2.15.5'
   gem 'capistrano-ext'
   gem 'brightbox'
+  gem 'rvm-capistrano'
 end
 
 gem 'mocha'
