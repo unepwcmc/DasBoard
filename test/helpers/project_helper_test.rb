@@ -12,8 +12,8 @@ class ProjectHelperTest < ActionView::TestCase
     self.expects(:content_tag)
       .with(:h3, objective.name, {
         "data-behavior" => "hover-edit",
-        "data-model-id" => objective.id,
-        "data-model-type" => 'objectives',
+        "data-url" => "/objectives/#{objective.id}",
+        "data-model-type" => 'objective',
         "data-field-name" => 'name'
       }).returns('HTML')
 
