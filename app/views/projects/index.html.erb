@@ -1,7 +1,7 @@
 <ul id="projects">
   <% @projects.each do |project| %>
     <li>
-      <%= link_to project['value']['name'], project_path(project['value']['_id']) %>
+      <%= link_to project.name, project_path(project) %>
     </li>
   <% end %>
 </ul>

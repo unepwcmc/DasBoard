@@ -66,6 +66,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.8.4)
     multipart-post (2.0.0)
+    pg (0.17.1)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -124,6 +125,7 @@ DEPENDENCIES
   foundation-rails
   jquery-rails
   mocha
+  pg
   rails (= 4.0.2)
   sass-rails (~> 4.0.0)
   therubyracer

@@ -23,16 +23,19 @@ class window.EditField
     @close()
 
   saveUpdate: =>
-    modelId = @$el.attr('data-model-id')
+    url = @$el.attr('data-url')
+    modelType = @$el.attr('data-model-type')
     fieldName = @$el.attr('data-field-name')
 
-    data = {model: {}}
-    data.model[fieldName] = @$el.text()
+    data = {}
+    data[modelType] = {}
+    data[modelType][fieldName] = @$el.text()
 
     $.ajax(
       type: "PUT",
-      url: "/models/#{modelId}"
-      data: data
+      url: url
+      data: JSON.stringify(data)
+      contentType: 'application/json'
     ).success(
       @close
     ).fail(->

@@ -1,16 +1,25 @@
 class ProjectsController < ApplicationController
 
   def index
-    @projects = Project.view(:all)
+    @projects = Project.all
   end
 
   def show
     id = params[:id]
-    result = Project.find_with_nested_objectives(id)
-    @project = result[0]['value']
-    Project.populate_metrics_on_objectives!(@project)
-
-    @metrics = Metric.view('all').map {|m| m["value"]}
+    @project = Project.find(id)
+    @metrics = Metric.all
   end
 
+  def update
+    @project = Project.find(params[:id])
+    @project.update_attributes!(project_params)
+
+    render json: @project
+  end
+
+  private
+
+  def project_params
+    params.require(:project).permit(:name)
+  end
 end

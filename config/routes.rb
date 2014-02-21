@@ -1,7 +1,7 @@
 DasBoard::Application.routes.draw do
   root 'projects#index'
 
-  resources :projects, only: ['index', 'show'] do
+  resources :projects, only: ['index', 'show', 'update'] do
     member do
       resources :objectives, only: ['new']
     end
@@ -13,8 +13,6 @@ DasBoard::Application.routes.draw do
       post 'data'
     end
   end
-
-  resources :models, only: ['update']
 
   if Rails.env.development?
     get "test", to: 'test#test'

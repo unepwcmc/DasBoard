@@ -3,16 +3,10 @@ require 'test_helper'
 class ProjectsControllerTest < ActionController::TestCase
 
   test ':index assigns all projects' do
+    projects = [Project.new({id: '123', name: 'An project'})]
     Project.
-      expects(:view).
-      with(:all).
-      returns([{
-        "value" => {
-          "_id" => 'anid',
-          "name" => 'An project',
-          "type" => "project",
-        }
-      }])
+      expects(:all).
+      returns(projects)
 
     get :index
 
@@ -21,59 +15,54 @@ class ProjectsControllerTest < ActionController::TestCase
     assigned_projects = assigns(:projects)
     assert_not_nil assigned_projects, 'Expected @projects to be assigned'
     assert_equal 1, assigned_projects.length
-    assert_equal 'An project', assigned_projects.first['value']['name']
+    assert_equal 'An project', assigned_projects.first.name
   end
 
   test ':show assigns the project with nested metrics' do
-    project_json = {
-      "_id" => "123",
-      "name" => 'An project',
-      "type" => "project",
-      "objectives" => []
-    }
-    Project.expects(:find_with_nested_objectives).
-      with('123').
-      returns([{
-        "value" => project_json
-      }])
+    project_id = '123'
+    Project.expects(:find)
+      .with(project_id)
+      .returns(Project.new({
+        id: project_id,
+        name: "An project"
+      }))
 
-    Project.expects(:populate_metrics_on_objectives!).
-      with(project_json)
-
-    get :show, id: '123'
+    get :show, id: project_id
 
     assert_response :success
 
     assigned_project = assigns(:project)
     assert_not_nil assigned_project, 'Expected @project to be assigned'
-    assert_equal 'An project', assigned_project['name']
+    assert_equal 'An project', assigned_project.name
   end
 
   test ':show assigns a list of metrics' do
-    project_json = {
-      "_id" => "123",
-      "type" => "project",
-      "objectives" => []
-    }
-    Project.expects(:find_with_nested_objectives).
-      with('123').
-      returns([{
-        "value" => project_json
-      }])
+    project_id = '123'
+    Project.expects(:find).
+      with(project_id).
+      returns(Project.new(id: project_id))
 
+    metrics = [Metric.new({name: "Fancy banana"})]
 
-    metrics = [{"value" => {name: "Fancy banana"}}]
-    expected_metrics = metrics.map{|m|m["value"]}
-
-    Metric.expects(:view)
-      .with('all')
+    Metric.expects(:all)
       .returns(metrics)
 
-    get :show, id: '123'
+    get :show, id: project_id
 
     assigned_metrics = assigns(:metrics)
     assert_not_nil assigned_metrics, "Expected @metrics to be assigned"
-    assert_equal assigned_metrics, expected_metrics
+
+    assert_equal 1, assigned_metrics.length
+    assert_equal assigned_metrics.first, metrics.first
   end
 
+  test "PUT /project/:id updates the project" do
+    project = Project.create(name: "a crappy name")
+
+    put :update, id: project.id, project: { name: "a much better name" }
+
+    updated_project = Project.find(project.id)
+
+    assert_equal "a much better name", updated_project.name
+  end
 end

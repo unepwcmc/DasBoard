@@ -25,20 +25,18 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
   end
 
   test "PUT /objectives/:id updates the objective and returns the objective as JSON" do
-    objective = Objective.new(metric_id: nil)
-    objective.save
+    objective = Objective.create(metric_id: nil)
 
-    metric = Metric.new(name: "an metric")
-    metric.save
+    metric = Metric.create(name: "an metric")
 
-    put "/objectives/#{objective.id}", metric_id: metric.id
+    put "/objectives/#{objective.id}", objective: {metric_id: metric.id}
 
     updated_objective = JSON.parse(response.body)
 
-    assert_equal objective.id, updated_objective['_id']
+    assert_equal objective.id, updated_objective['id']
     assert_not_nil updated_objective['metric']
 
     returned_metric = updated_objective['metric']
-    assert_equal metric.id, returned_metric['_id']
+    assert_equal metric.id, returned_metric['id']
   end
 end

@@ -1,31 +1,37 @@
 class ObjectivesController < ApplicationController
 
   def new
-    @objective = Objective.new({
+    @objective = Objective.create({
       "name" => "New Objective",
-      "type" => "objective",
       "project_id" => params[:id]
     })
-    @objective.save
 
-    @metrics = Metric.view('all').map {|m| m["value"]}
+    @metrics = Metric.all
 
     render layout: false
   end
 
   def update
     objective = Objective.find(params[:id])
-    objective.update({
-      metric_id: params[:metric_id]
-    })
+    objective.update_attributes(objective_params)
+    objective.save
 
-    objective.attributes[:metric] = Metric.find(params[:metric_id]).attributes
+    objectiveJSON = objective.attributes
 
-    render json: objective.attributes
+    if objective.metric
+      objectiveJSON[:metric] = objective.metric.attributes
+    end
+
+    render json: objectiveJSON
   end
 
   def create
     render json: Couch::Db.post(params[:objective])
   end
 
+  private
+
+  def objective_params
+    params.require(:objective).permit(:metric_id, :name)
+  end
 end

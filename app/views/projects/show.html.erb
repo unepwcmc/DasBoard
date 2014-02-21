@@ -1,20 +1,19 @@
 <%= editable_tag(@project, 'name', :h2)%>
 
-
 <div id="objectives">
-  <% @project['objectives'].each do |objective| %>
+  <% @project.objectives.each do |objective| %>
     <%= render partial: "objectives/objective", locals: {objective: objective} %>
   <% end %>
 </div>
 
-<button id="add-objective" data-project-id="<%= @project['_id'] %>">
+<button id="add-objective" data-project-id="<%= @project.id %>">
   Add objective
 </button>
 
 <% content_for :javascript do %>
   <script>
     $(function() {
-      var objectives = <%= @project['objectives'].to_json.html_safe %>;
+      var objectives = <%= @project.objectives.to_json.html_safe %>;
       new window.DasBoard.ProjectShowController(objectives);
     });
   </script>

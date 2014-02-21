@@ -1,2 +1,3 @@
-class Objective < Couch::Model
+class Objective < ActiveRecord::Base
+  belongs_to :metric
 end
