@@ -42,7 +42,7 @@ set :deploy_via, :remote_cache
 #
 # The shared area is prepared with 'deploy:setup' and all the shared
 # items are symlinked in when the code is updated.
-set :local_shared_files, %w(config/database.yml config/environments/production.rb)
+set :local_shared_files, %w(config/database.yml)
 
 # If you are not using the brightbox gem, uncomment out the following so
 # that the dotenv file is symlinked correctly.
@@ -95,7 +95,7 @@ task :config_vhost do
       client_max_body_size 4G;
       gzip on;
       keepalive_timeout 5;
-      root #{deploy_to}/public;
+      root #{deploy_to}/current/public;
 
       passenger_enabled on;
       rails_env #{rails_env};
