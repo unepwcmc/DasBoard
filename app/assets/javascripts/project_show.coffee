@@ -4,6 +4,7 @@ class window.DasBoard.ProjectShowController
   constructor: (@objectives) ->
     $('#add-objective').click(@addObjective)
     $('body').on('ajax:success', '.objective-metric-form', @showChangedMetric)
+    $('body').on('ajax:error', '.objective-metric-form', @updateMetricError)
 
     @createMetricCharts()
 
@@ -12,6 +13,10 @@ class window.DasBoard.ProjectShowController
     $metricEl = $formEl.parents('.metric')
 
     new MetricChartView($metricEl, new Metric(data.metric))
+
+  updateMetricError: (event, data, status, xhr) ->
+    console.log data
+    alert('Error saving metric, please reload the page')
 
   createMetricCharts: ->
     for objective in @objectives
