@@ -25,7 +25,17 @@ body {
   padding-bottom: 30px;
   margin-bottom: 30px;
 
+
   .delete-objective {
+    display: none;
     float:right;
+    margin-top: -35px;
+    font-size: 15px;
+  }
+
+  &:hover {
+    .delete-objective {
+      display: inline;
+    }
   }
 }

@@ -1,6 +1,8 @@
 <section class="objective" id="objective-<%= objective.id %>">
   <%= editable_tag(objective, 'name', :h3)%>
-  <%= link_to 'x', objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} %>
+  <%= link_to objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} do %>
+    <i class="fa fa-minus-circle"></i> Delete Objective
+  <% end %>
 
   <div class="metric">
     <% unless objective.metric_id.present? %>
