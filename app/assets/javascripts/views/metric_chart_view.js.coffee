@@ -6,7 +6,7 @@ class window.MetricChartView
     @render()
 
   render: ->
-    @$canvas = $('<canvas width=50 height=50></canvas>')
+    @$canvas = $('<canvas width=900 height=562></canvas>')
     @$el.html(@$canvas)
 
     context = @$canvas.get(0).getContext("2d")

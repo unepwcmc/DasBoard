@@ -21,7 +21,7 @@ class window.DasBoard.ProjectShowController
   createMetricCharts: ->
     for objectiveId, metric of @objectiveMetrics
       if metric
-        $metricEl = $("objective-#{objectiveId}").find('.metric')
+        $metricEl = $("#objective-#{objectiveId}").find('.metric')
 
         new MetricChartView(
           $metricEl,
