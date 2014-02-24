@@ -1,1 +1,6 @@
 <%= editable_tag(@metric, 'name', 'h1') %>
+
+<pre>
+  curl -X POST -H "Content-Type: application/json" -d \
+  '{"data":{"date":1393239736,"value":4}}' <%= URI.join root_url, data_metric_path(@metric.id) %>
+</pre>
