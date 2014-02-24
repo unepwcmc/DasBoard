@@ -75,4 +75,22 @@ class MetricsTest < ActionDispatch::IntegrationTest
     assert_equal metric.id, updated_metric['id']
     assert_equal new_name, updated_metric['name']
   end
+
+  test "GET /metrics/:id shows the curl command for POSTing data to the metric" do
+    metric = Metric.create()
+
+    get "/metrics/#{metric.id}"
+
+    example_data = {
+      data: {
+        date: 1393239736,
+        value: 4
+      }
+    }.to_json
+
+    assert_select "pre", {
+      count: 1,
+      text: /curl -X POST -H "Content-Type: application\/json" -d \\.  '#{example_data}' #{root_url}metrics\/#{metric.id}\/data/m
+    }
+  end
 end
