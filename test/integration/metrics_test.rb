@@ -58,8 +58,21 @@ class MetricsTest < ActionDispatch::IntegrationTest
 
     get "/metrics/#{metric.id}"
 
-    assert_select 'h1', {
+    assert_select 'h1[data-behavior="hover-edit"]', {
       text: "My Metric"
     }
+  end
+
+  test "PUT-ing to the update path returns the modified metric as JSON" do
+    metric = Metric.create()
+
+    new_name = "Totally modified"
+
+    put "/metrics/#{metric.id}", metric: {name: new_name}
+
+    updated_metric = JSON.parse(response.body)
+
+    assert_equal metric.id, updated_metric['id']
+    assert_equal new_name, metric.name
   end
 end

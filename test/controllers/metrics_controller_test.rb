@@ -42,6 +42,7 @@ class MetricsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+
   test "GET /metrics/:id fetches the correct metric" do
     metric = Metric.new(id:5, name: "test")
     Metric.expects(:find)
@@ -52,5 +53,19 @@ class MetricsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal metric, assigns(:metric)
+  end
+
+  test "PUT /metrics/:id updates the metric" do
+    metric = Metric.create(name: "test")
+
+    new_name = "After dinner"
+
+    get :update, id: metric.id, metric: {name: new_name}
+
+    assert_response :success
+    assert_equal metric, assigns(:metric)
+
+    metric.reload
+    assert_equal new_name, metric.name
   end
 end

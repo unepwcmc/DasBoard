@@ -16,11 +16,25 @@ class MetricsController < ApplicationController
     @metric = Metric.find(params[:id])
   end
 
+  def update
+    metric = Metric.find(params[:id])
+    metric.update_attributes(metric_params)
+    metric.save!
+
+    render json: metric
+  end
+
   def data
     metric = Metric.find params[:id]
     metric.add_data_point(params[:data])
     metric.save
 
     render json: metric
+  end
+
+  private
+
+  def metric_params
+    params.require('metric').permit(:name)
   end
 end
