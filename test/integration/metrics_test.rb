@@ -46,4 +46,33 @@ class MetricsTest < ActionDispatch::IntegrationTest
     data_point = updated_metric.data.first
     assert_equal post_data[:data].stringify_keys, data_point
   end
+
+  test "/metrics/new redirects to a metric page for a new metric" do
+    get "/metrics/new"
+
+    assert_redirected_to metric_path(assigns(:metric))
+  end
+
+  test "/metrics/show shows the title of the metric" do
+    metric = Metric.create(name: "My Metric")
+
+    get "/metrics/#{metric.id}"
+
+    assert_select 'h1[data-behavior="hover-edit"]', {
+      text: "My Metric"
+    }
+  end
+
+  test "PUT-ing to the update path returns the modified metric as JSON" do
+    metric = Metric.create()
+
+    new_name = "Totally modified"
+
+    put "/metrics/#{metric.id}", metric: {name: new_name}
+
+    updated_metric = JSON.parse(response.body)
+
+    assert_equal metric.id, updated_metric['id']
+    assert_equal new_name, metric.name
+  end
 end

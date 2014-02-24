@@ -1,14 +1,14 @@
 DasBoard::Application.routes.draw do
   root 'projects#index'
 
-  resources :projects, only: ['index', 'show', 'update'] do
+  resources :projects, only: [:index, :show, :update] do
     member do
       resources :objectives, only: ['new']
     end
   end
 
-  resources :objectives, only: ['create', 'update', 'destroy']
-  resources :metrics, only: ['index'] do
+  resources :objectives, only: [:create, :update, :destroy]
+  resources :metrics, only: [:index, :new, :show, :update] do
     member do
       post 'data'
     end

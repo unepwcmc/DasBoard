@@ -22,6 +22,10 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
     assert_select "form", {
       count: 1
     }
+
+    assert_select 'a[href="/metrics/new"]', {
+      count: 1
+    }
   end
 
   test "PUT /objectives/:id updates the objective and returns the objective as JSON" do
