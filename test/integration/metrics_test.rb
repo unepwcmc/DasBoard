@@ -46,4 +46,20 @@ class MetricsTest < ActionDispatch::IntegrationTest
     data_point = updated_metric.data.first
     assert_equal post_data[:data].stringify_keys, data_point
   end
+
+  test "/metrics/new redirects to a metric page for a new metric" do
+    get "/metrics/new"
+
+    assert_redirected_to metric_path(assigns(:metric))
+  end
+
+  test "/metrics/show shows the title of the metric" do
+    metric = Metric.create(name: "My Metric")
+
+    get "/metrics/#{metric.id}"
+
+    assert_select 'h1', {
+      text: "My Metric"
+    }
+  end
 end

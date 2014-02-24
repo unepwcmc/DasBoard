@@ -32,4 +32,25 @@ class MetricsControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  test "GET /metrics/new creates a new metric in the database" do
+    assert_difference('Metric.count', 1) do
+      get :new
+    end
+
+    assert_equal "New Metric", assigns(:metric).name
+    assert_response :redirect
+  end
+
+  test "GET /metrics/:id fetches the correct metric" do
+    metric = Metric.new(id:5, name: "test")
+    Metric.expects(:find)
+      .with(metric.id.to_s)
+      .returns(metric)
+
+    get :show, id: metric.id
+
+    assert_response :success
+    assert_equal metric, assigns(:metric)
+  end
 end
