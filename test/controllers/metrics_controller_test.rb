@@ -63,7 +63,6 @@ class MetricsControllerTest < ActionController::TestCase
     get :update, id: metric.id, metric: {name: new_name}
 
     assert_response :success
-    assert_equal metric, assigns(:metric)
 
     metric.reload
     assert_equal new_name, metric.name

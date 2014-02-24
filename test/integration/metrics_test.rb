@@ -73,6 +73,6 @@ class MetricsTest < ActionDispatch::IntegrationTest
     updated_metric = JSON.parse(response.body)
 
     assert_equal metric.id, updated_metric['id']
-    assert_equal new_name, metric.name
+    assert_equal new_name, updated_metric['name']
   end
 end
