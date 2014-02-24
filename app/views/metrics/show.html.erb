@@ -5,3 +5,16 @@
   curl -X POST -H "Content-Type: application/json" -d \
   '{"data":{"date":<%= Time.now.to_i %>,"value":4}}' <%= URI.join root_url, data_metric_path(@metric.id) %>
 </pre>
+
+<div class="metric">
+</div>
+
+<% content_for :javascript do %>
+  <script>
+    $(function() {
+      var metric = <%= @metric.to_json.html_safe %>;
+
+      new window.DasBoard.MetricShowController(metric);
+    });
+  </script>
+<% end %>

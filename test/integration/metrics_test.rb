@@ -81,16 +81,9 @@ class MetricsTest < ActionDispatch::IntegrationTest
 
     get "/metrics/#{metric.id}"
 
-    example_data = {
-      data: {
-        date: 1393239736,
-        value: 4
-      }
-    }.to_json
-
     assert_select "pre", {
       count: 1,
-      text: /curl -X POST -H "Content-Type: application\/json" -d \\.  '#{example_data}' #{root_url}metrics\/#{metric.id}\/data/m
+      text: /curl -X POST -H "Content-Type: application\/json" -d \\.  '{"data":{"date":\d+,"value":4}}' #{root_url}metrics\/#{metric.id}\/data/m
     }
   end
 end

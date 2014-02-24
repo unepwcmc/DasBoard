@@ -16,7 +16,7 @@
 //= require Chart
 //= require_tree ./models
 //= require_tree ./views
-//= require project_show
+//= require_tree ./controllers
 //= require edit_field
 //= require hover_editable
 

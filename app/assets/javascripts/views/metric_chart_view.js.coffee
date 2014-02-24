@@ -6,12 +6,12 @@ class window.MetricChartView
     @render()
 
   render: ->
-    @$canvas = $('<canvas width=900 height=562></canvas>')
-    @$el.html(@$canvas)
+    if @metric.attributes.data? && @metric.attributes.data.length > 0
+      @$canvas = $('<canvas width=900 height=562></canvas>')
+      @$el.html(@$canvas)
 
-    context = @$canvas.get(0).getContext("2d")
+      context = @$canvas.get(0).getContext("2d")
 
-    if @metric.attributes.data?
       labels = @metric.getDataLabels()
       data = @metric.getDataPoints()
 
@@ -30,5 +30,3 @@ class window.MetricChartView
         bezierCurve: false,
         animation: false
       })
-    else
-      @$canvas.html("No data for this metric")
