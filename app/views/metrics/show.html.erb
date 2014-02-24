@@ -1,6 +1,7 @@
 <%= editable_tag(@metric, 'name', 'h1') %>
 
+<p>Add a data point by posting an epoch and a value:</p>
 <pre>
   curl -X POST -H "Content-Type: application/json" -d \
-  '{"data":{"date":1393239736,"value":4}}' <%= URI.join root_url, data_metric_path(@metric.id) %>
+  '{"data":{"date":<%= Time.now.to_i %>,"value":4}}' <%= URI.join root_url, data_metric_path(@metric.id) %>
 </pre>
