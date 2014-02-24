@@ -1,1 +1,11 @@
 <%= editable_tag(@metric, 'name', 'h1') %>
+
+<% content_for :javascript do %>
+  <script>
+    $(function() {
+      var metric = <%= @metric.to_json.html_safe %>;
+
+      new window.DasBoard.MetricShowController(metric);
+    });
+  </script>
+<% end %>
