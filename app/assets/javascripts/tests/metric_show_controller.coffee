@@ -10,11 +10,10 @@ test('Passes the given metric through to the MetricChartView', ->
 
   try
     new DasBoard.MetricShowController(metric)
-
     assert.strictEqual window.MetricChartView.callCount, 1,
       "Expected a metric chart view to be created"
 
-    assert.deepEqual window.MetricChartView.getCall(0).args(1), metric,
+    assert.deepEqual window.MetricChartView.getCall(0).args[1].attributes, metric,
       "Expected the metric to be passed to the constructor"
   finally
     window.MetricChartView = actualMetricChartView
