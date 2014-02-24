@@ -21,6 +21,7 @@ gem 'therubyracer', platforms: :ruby
 
 gem 'jquery-rails'
 gem 'foundation-rails'
+gem "font-awesome-rails"
 
 group :development do
   gem 'debugger'

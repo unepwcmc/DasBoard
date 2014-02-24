@@ -53,33 +53,12 @@ class ProjectsTest < ActionDispatch::IntegrationTest
 
     assert_response :success
 
-    assert_select "##{objective.id}", {
+    assert_select "#objective-#{objective.id}", {
       count: 1
     }, "Expected to see an element with the objective id"
     assert_select "h3", {
       count: 1,
       text: objective_attrs[:name]
     }, 'Expected to see objective name'
-  end
-
-
-  test "/projects/:id renders the project's objectives' metrics" do
-    project = Project.create({name: 'An project'})
-
-    metric = Metric.create({name: "Total downloads"})
-
-    Objective.create({
-      name: "Increase ROI",
-      project_id: project.id,
-      metric_id: metric.id
-    })
-
-    get "/projects/#{project.id}"
-
-    assert_response :success
-
-    assert_select "canvas#metric-#{metric.id}", {
-      count: 1,
-    }, 'Expect to see a metric placeholder'
   end
 end

@@ -55,4 +55,13 @@ class ObjectivesControllerTest < ActionController::TestCase
 
     assert_equal "test", updated_objective.name
   end
+
+  test "DELETE /objectives/:id destroys the objective" do
+    objective = Objective.create
+
+    assert_response :success
+    assert_difference 'Objective.count', -1 do
+      delete :destroy, id: objective.id
+    end
+  end
 end

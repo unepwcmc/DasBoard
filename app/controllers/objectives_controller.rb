@@ -25,6 +25,13 @@ class ObjectivesController < ApplicationController
     render json: objectiveJSON
   end
 
+  def destroy
+    objective = Objective.find(params[:id])
+    objective.destroy!
+
+    render json: objective
+  end
+
   def create
     render json: Couch::Db.post(params[:objective])
   end
