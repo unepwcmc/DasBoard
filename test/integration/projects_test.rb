@@ -61,4 +61,10 @@ class ProjectsTest < ActionDispatch::IntegrationTest
       text: objective_attrs[:name]
     }, 'Expected to see objective name'
   end
+
+  test "/projects/new redirects to a metric page for a new metric" do
+    get "/projects/new"
+
+    assert_redirected_to project_path(assigns(:project))
+  end
 end

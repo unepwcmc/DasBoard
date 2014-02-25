@@ -10,6 +10,13 @@ class ProjectsController < ApplicationController
     @metrics = Metric.all
   end
 
+  def new
+    @project = Project.new(name: "New Project")
+    @project.save!
+
+    redirect_to project_path(@project)
+  end
+
   def update
     @project = Project.find(params[:id])
     @project.update_attributes!(project_params)

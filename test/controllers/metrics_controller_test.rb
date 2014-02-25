@@ -42,7 +42,6 @@ class MetricsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
-
   test "GET /metrics/:id fetches the correct metric" do
     metric = Metric.new(id:5, name: "test")
     Metric.expects(:find)
