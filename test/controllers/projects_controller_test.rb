@@ -65,4 +65,13 @@ class ProjectsControllerTest < ActionController::TestCase
 
     assert_equal "a much better name", updated_project.name
   end
+
+  test "GET /projects/new creates a new project in the database" do
+    assert_difference('Project.count', 1) do
+      get :new
+    end
+
+    assert_equal "New Project", assigns(:project).name
+    assert_response :redirect
+  end
 end
