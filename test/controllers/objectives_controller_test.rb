@@ -56,6 +56,17 @@ class ObjectivesControllerTest < ActionController::TestCase
     assert_equal "test", updated_objective.name
   end
 
+  test "PUT /objectives/:id updates the threshold" do
+    objective = Objective.new()
+    objective.save
+
+    put :update, id: objective.id, objective: {threshold: 24.0}
+
+    updated_objective = Objective.find(objective.id)
+
+    assert_equal 24.0, updated_objective.threshold
+  end
+
   test "DELETE /objectives/:id destroys the objective" do
     objective = Objective.create
 
