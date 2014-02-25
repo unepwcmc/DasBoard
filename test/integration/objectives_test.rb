@@ -43,4 +43,15 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
     returned_metric = updated_objective['metric']
     assert_equal metric.id, returned_metric['id']
   end
+
+  test "PUT /objectives/:id with a threshold number updates the threshold" do
+    objective = Objective.create()
+
+    put "/objectives/#{objective.id}", objective: {threshold: 42}
+
+    updated_objective = JSON.parse(response.body)
+
+    assert_equal objective.id, updated_objective['id']
+    assert_equal "42.0", updated_objective['threshold']
+  end
 end

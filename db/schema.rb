@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140220115005) do
+ActiveRecord::Schema.define(version: 20140225150653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20140220115005) do
     t.string  "name"
     t.integer "metric_id"
     t.integer "project_id"
+    t.decimal "threshold"
   end
 
   add_index "objectives", ["metric_id"], name: "index_objectives_on_metric_id", using: :btree
