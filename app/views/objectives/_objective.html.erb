@@ -1,5 +1,6 @@
 <section class="objective" id="objective-<%= objective.id %>">
   <%= editable_tag(objective, 'name', :h3)%>
+  Threshold: <%= editable_tag(objective, 'threshold', :h4)%>
   <%= link_to objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} do %>
     <i class="fa fa-minus-circle"></i> Delete Objective
   <% end %>
