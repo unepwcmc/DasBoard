@@ -9,13 +9,9 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
 
     assert_select ".objective" do
       assert_select "h3", {
-        text: "New Objective"
+        text: "Enter the name of the new objective"
       }
     end
-
-    assert_select ".objective", {
-      text: /No metric selected/
-    }
 
     assert_template partial: "_select_metric"
 

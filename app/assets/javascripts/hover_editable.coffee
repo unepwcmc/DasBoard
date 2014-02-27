@@ -34,7 +34,7 @@ class HoverTab
     @hovering = false
 
   render: ->
-    @$el = $("<div class='hover-edit-tab'>Edit</div>")
+    @$el = $("<div class='hover-edit-tab'><i class='fa fa-pencil-square'></i></div>")
     $('body').append(@$el)
     @$el.hover(
       (=> @hovered = true),

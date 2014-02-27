@@ -1,22 +1,87 @@
 body {
-  background-image: asset-url('food.png');
+  background-color: #fff;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  color: #555459;
 }
 
-.row {
-  background-color: white;
-  padding: 10px 25px;
+nav {
+  width: 100%;
+  background: #4295d5;
+  padding: 20px 0;
+}
 
-  h2 {
-    margin-bottom: 30px;
+ul {
+  padding-left: 0;
+}
+
+ul#nav-links {
+  width: 70%;
+  margin: auto;
+  list-style-type: none;
+  overflow: hidden;
+  li {
+    float: right;
+    font-size: 1em;
+    line-height: 1em;
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+  li.name {
+    float: left;
+    font-size: 1.25em;
   }
 }
 
-#projects {
-  list-style-type: none;
+a.button, input[type="submit"], button {
+  padding: 10px 15px;
+  font-size: 1em;
+  background: #A5CE19;
+  line-height: 39px;
+  border-radius: 5px;
+}
 
+input[type="submit"], button {
+  border: none;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  line-height: 1em;
+  color: #fff;
+}
+
+select {
+  border: none;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  font-size: 1em;
+  line-height: 1em;
+  padding: 10px 15px;
+  background: #f7f7f7;
+}
+
+.container {
+  width: 70%;
+  margin: 100px auto;
+
+  h2 {
+    margin-bottom: 30px;
+    font-size: 3em;
+  }
+}
+
+ul#projects {
+  list-style-type: none;
+  margin: 100px 0;
+  width: 100%;
   li {
-    padding: 5px;
-    border-bottom: 1px solid #EEE;
+    background-color: rgba(66, 149, 213, 0.5);
+    padding: 15px 20px;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 700;
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
   }
 }
 
@@ -29,8 +94,11 @@ body {
   .delete-objective {
     display: none;
     float:right;
-    margin-top: -35px;
-    font-size: 15px;
+    position: relative;
+    font-size: 2em;
+    color: #333;
+    top: -40px;
+    right: -30px;
   }
 
   &:hover {
@@ -39,3 +107,18 @@ body {
     }
   }
 }
+
+.hover-edit-tab {
+  font-size: 2em;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+section.objective {
+  background: #eee;
+  padding: 20px;
+  h3 {
+    margin-top: 0;
+  }
+}
+
