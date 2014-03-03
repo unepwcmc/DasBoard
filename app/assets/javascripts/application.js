@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require nightcharts-wrap
 //= require handlebarz
 //= require Chart
 //= require_tree ./models

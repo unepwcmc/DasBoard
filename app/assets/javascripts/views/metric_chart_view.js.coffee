@@ -7,26 +7,24 @@ class window.MetricChartView
 
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
-      @$canvas = $('<canvas width=900 height=562></canvas>')
-      @$el.html(@$canvas)
 
-      context = @$canvas.get(0).getContext("2d")
+      d3 = chart.d3
+      @$el.html('<div id="viz" style="width: 800px; height: 600px;"></div>')
+      selection = d3.select('#viz')
 
-      labels = @metric.getDataLabels()
-      data = @metric.getDataPoints()
+      parse = d3.time.format("%Y-%m-%d").parse
+      format = d3.time.format("%Y-%m-%d")
+      format(new Date(2011, 0, 1))
 
-      @chart = new Chart(context).Line({
-        labels : labels
-        datasets : [
-          {
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
-            pointStrokeColor : "#fff",
-            data : data
-          }
-        ]
-      },{
-        bezierCurve: false,
-        animation: false
-      })
+      data = @metric.attributes.data.map( (o) ->
+        [format(new Date(o.date * 1000)), o.value]
+      )
+      
+      linechart = chart.line()
+        .margin({right: 50})
+        .width(750)
+        .height(500)
+        .duration(0)
+        .parseDate(parse)
+        .x_axis({tickFormat: d3.time.format("%a %d")})
+      chart.draw(linechart, selection, data)

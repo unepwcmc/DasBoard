@@ -39,3 +39,29 @@ body {
     }
   }
 }
+
+.metric {
+
+  .y.axis line, #line-viz .y.axis path {
+    fill: none;
+    stroke: #555;
+  }
+  
+  .x.axis line {
+    fill: none;
+    stroke: none;
+  }
+  
+  text {
+    fill: #555;
+    font-size: 0.9em;
+  }
+  
+  .line {
+    fill: none;
+    stroke: #FF530D;
+    stroke-width: 2px;
+  }
+
+}
+
