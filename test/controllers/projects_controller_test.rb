@@ -71,7 +71,7 @@ class ProjectsControllerTest < ActionController::TestCase
       get :new
     end
 
-    assert_equal "New Project", assigns(:project).name
+    assert_equal "Enter the name of the new project", assigns(:project).name
     assert_response :redirect
   end
 end

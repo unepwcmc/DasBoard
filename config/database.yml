@@ -4,6 +4,12 @@ development:
   username: postgres
   password:
   host: localhost
+  encoding: unicode
+  pool: 5
+  username: blancatortajada
+  password:
+  timeout: 5000
+  port: 5432
 
 test:
   adapter: postgresql
@@ -11,3 +17,9 @@ test:
   username: postgres
   password:
   host: localhost
+  encoding: unicode
+  pool: 5
+  username: blancatortajada
+  password:
+  timeout: 5000
+  port: 5432

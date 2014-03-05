@@ -1,13 +1,43 @@
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #fff;
+  background-image: asset-url('noise.png');
   font-family: 'lato', helvetica, arial, sans-serif;
   color: #555459;
 }
 
+a.button, input[type="submit"], button {
+  padding: 5px 15px;
+  font-size: 1em;
+  background: #34AADC;
+  line-height: 39px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+  &:hover, &:active {
+    background: #1E73A1;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+}
+
+input[type="submit"], button {
+  border: none;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  line-height: 1em;
+  color: #fff;
+}
+
 nav {
-  width: 100%;
-  background: #4295d5;
-  padding: 20px 0;
+  background: #222;
+  padding: 10px 0;
 }
 
 ul {
@@ -31,22 +61,8 @@ ul#nav-links {
   li.name {
     float: left;
     font-size: 1.25em;
+    line-height: 39px;
   }
-}
-
-a.button, input[type="submit"], button {
-  padding: 10px 15px;
-  font-size: 1em;
-  background: #A5CE19;
-  line-height: 39px;
-  border-radius: 5px;
-}
-
-input[type="submit"], button {
-  border: none;
-  font-family: 'lato', helvetica, arial, sans-serif;
-  line-height: 1em;
-  color: #fff;
 }
 
 select {
@@ -61,26 +77,84 @@ select {
 .container {
   width: 70%;
   margin: 100px auto;
+  height: 100%;
 
   h2 {
     margin-bottom: 30px;
-    font-size: 3em;
+    font-size: 2em;
   }
 }
 
 ul#projects {
   list-style-type: none;
-  margin: 100px 0;
+  margin: 50px 0 0 0;
   width: 100%;
+  overflow: hidden;
   li {
-    background-color: rgba(66, 149, 213, 0.5);
-    padding: 15px 20px;
+    width: 32%;
+    float: left;
+    margin-right: 2%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     margin-bottom: 30px;
-    font-size: 2em;
+    font-size: 1.25em;
     font-weight: 700;
+    background-color: #fff;
+    box-shadow: 1px 2px rgba(0,0,0,0.03);
     a {
       text-decoration: none;
-      color: #fff;
+      color: #34AADC;
+    }
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+    &:nth-child(3n+1) {
+      clear: left;
+    }
+    div.project-name {
+      padding: 15px 20px;
+      min-height: 6em;
+      background-image: asset-url('graph.png');
+      background-position: bottom;
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+    div.activity {
+      border-top: 1px solid #ddd;
+      padding: 15px 20px;
+      overflow: hidden;
+      position: relative;
+      bottom: 0;
+      color: #bbb;
+      background: #f7f7f7;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      i {
+        float: left;
+        font-size: 1em;
+      }
+      div.activity-details {
+        float: left;
+        font-size: 0.75em;
+        padding-left: 10px;
+        font-weight: 500;
+        p {
+          margin: 0 0 3px 0;
+        }
+      }
+    }
+    &:hover, &:active {
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -ms-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+      border: 1px solid #34AADC;
+      div.activity {
+        background: #34AADC;
+        border-top: #34AADC;
+        color: #fff;
+      }
     }
   }
 }
@@ -94,31 +168,59 @@ ul#projects {
   .delete-objective {
     display: none;
     float:right;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
     position: relative;
-    font-size: 2em;
-    color: #333;
-    top: -40px;
+    top: -30px;
     right: -30px;
   }
 
   &:hover {
     .delete-objective {
       display: inline;
+      background-image: asset-url('remove.png');
+      box-shadow: 1px 2px rgba(0,0,0,0.03);
     }
   }
 }
 
 .hover-edit-tab {
-  font-size: 2em;
-  display: table-cell;
-  vertical-align: middle;
+  background-image: asset-url('edit.png');
+  box-shadow: 1px 2px rgba(0,0,0,0.03);
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
 }
 
 section.objective {
-  background: #eee;
+  border: 1px solid #ddd;
+  box-shadow: 1px 2px rgba(0,0,0,0.03);
+  background: #fff;
+  border-radius: 5px;
   padding: 20px;
   h3 {
     margin-top: 0;
   }
 }
 
+input[type="submit"].choose-metric {
+  display: none;
+}
+
+a.button.new-metric {
+  margin-left: 10px;
+}
+
+div.metric {
+  overflow: hidden;
+}
+
+form.objective-metric-form {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+h2#projects-header {
+  margin: 0;
+}

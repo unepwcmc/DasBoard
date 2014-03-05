@@ -1,6 +1,6 @@
 <section class="objective" id="objective-<%= objective.id %>">
   <%= link_to objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} do %>
-    <i class="fa fa-times-circle"></i>
+
   <% end %>
 
   <%= editable_tag(objective, 'name', :h3)%>

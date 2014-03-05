@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new(name: "New Project")
+    @project = Project.new(name: "Enter the name of the new project")
     @project.save!
 
     redirect_to project_path(@project)

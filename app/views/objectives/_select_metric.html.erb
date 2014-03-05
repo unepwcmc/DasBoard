@@ -1,5 +1,5 @@
 <%= form_for objective, remote: true, :html => {class: 'objective-metric-form'} do |f| %>
   <%= f.select :metric_id, options_from_collection_for_select(@metrics, :id, :name) %>
-  <%= f.submit "Create metric" %>
-<% end %>
-<%= link_to "Create metric", new_metric_path %>
+  <%= f.submit "Choose metric", class: "choose-metric" %>
+<% end %> or
+<%= link_to "Create a new metric", new_metric_path, class: "button new-metric" %>
