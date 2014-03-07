@@ -1,16 +1,14 @@
-<h2 id="projects-header">20 projects in progress</h2>
+<h2 id="projects-header"><%= @projects.count %> projects in progress</h2>
 <ul id="projects">
   <% @projects.each do |project| %>
     <li>
-      <div class="project-name">
-        <%= link_to project.name, project_path(project) %>
-      </div>
-      <div class="activity">
-        <i class="fa fa-bar-chart-o"></i>
-        <div class="activity-details">
+      <%= link_to project_path(project) do %>
+        <h3><%= project.name %></h3>
+        <div class="activity">
+          <i class="fa fa-bar-chart-o"></i>
           <p>Last updated on 12 April 2014</p>
         </div>
-      </div>
+      <% end %>
     </li>
   <% end %>
 </ul>
