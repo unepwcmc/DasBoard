@@ -2,7 +2,7 @@ class ObjectivesController < ApplicationController
 
   def new
     @objective = Objective.create({
-      "name" => "New Objective",
+      "name" => "Enter the name of the new objective",
       "project_id" => params[:id]
     })
 

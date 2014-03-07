@@ -1,22 +1,173 @@
-body {
-  background-image: asset-url('food.png');
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-.row {
-  background-color: white;
-  padding: 10px 25px;
+body {
+  background-image: asset-url('noise.png');
+  font-family: 'lato', helvetica, arial, sans-serif;
+  color: #555459;
+}
+
+a.button, input[type="submit"], button {
+  padding: 5px 15px;
+  font-size: 1em;
+  background: #34AADC;
+  line-height: 39px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #fff;
+
+  &:hover, &:active {
+    background: #1E73A1;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+}
+
+input[type="submit"], button {
+  border: none;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  line-height: 1em;
+  color: #fff;
+}
+
+ul {
+  padding-left: 0;
+}
+
+nav {
+  background: #222;
+  padding: 10px 0;
+
+  ul {
+    width: 70%;
+    margin: auto;
+    list-style-type: none;
+    overflow: hidden;
+
+    li {
+      float: right;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+
+    li.name {
+      float: left;
+      font-size: 1.25em;
+      line-height: 39px;
+    }
+  }
+}
+
+select {
+  border: none;
+  font-family: 'lato', helvetica, arial, sans-serif;
+  font-size: 1em;
+  line-height: 1em;
+  padding: 10px 15px;
+  background: #f7f7f7;
+}
+
+.container {
+  width: 70%;
+  margin: 30px auto;
+  height: 100%;
 
   h2 {
     margin-bottom: 30px;
+    font-size: 2em;
   }
 }
 
 #projects {
   list-style-type: none;
+  margin: 50px 0 0 0;
+  width: 100%;
+  overflow: hidden;
 
   li {
-    padding: 5px;
-    border-bottom: 1px solid #EEE;
+    width: 32%;
+    float: left;
+    margin-right: 2%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    font-size: 1.25em;
+    font-weight: 700;
+    background-color: #fff;
+    box-shadow: 1px 2px rgba(0,0,0,0.03);
+
+    a {
+      text-decoration: none;
+      color: #34AADC;
+    }
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+
+    &:nth-child(3n+1) {
+      clear: left;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1em;
+      padding: 15px 20px;
+      min-height: 4em;
+    }
+
+    .activity {
+      border-top: 1px solid #ddd;
+      padding: 15px 20px;
+      overflow: hidden;
+      position: relative;
+      bottom: 0;
+      color: #bbb;
+      background: #f7f7f7;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+
+      i {
+        float: left;
+      }
+
+      p {
+        float: left;
+        font-size: 0.75em;
+        padding-left: 10px;
+        font-weight: 500;
+        margin: 0 0 3px 0;
+      }
+    }
+
+    &:hover, &:active {
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -ms-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+      border: 1px solid #34AADC;
+      background: #34AADC;
+
+      a {
+        color: #fff;
+      }
+
+      .activity {
+        background: rgba(0,0,0,0.3);
+        border-top: rgba(0,0,0,0.3);
+        color: #fff;
+      }
+    }
   }
 }
 
@@ -29,39 +180,82 @@ body {
   .delete-objective {
     display: none;
     float:right;
-    margin-top: -35px;
-    font-size: 15px;
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    position: relative;
+    top: -30px;
+    right: -30px;
   }
 
   &:hover {
     .delete-objective {
       display: inline;
+      background-image: asset-url('remove.png');
+      box-shadow: 1px 2px rgba(0,0,0,0.03);
     }
   }
 }
 
-.metric {
+.hover-edit-tab {
+  background-image: asset-url('edit.png');
+  box-shadow: 1px 2px rgba(0,0,0,0.03);
+  width: 20px;
+  height: 20px;
+  background-size: 100%;
+}
 
+section.objective {
+  border: 1px solid #ddd;
+  box-shadow: 1px 2px rgba(0,0,0,0.03);
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  h3 {
+    margin-top: 0;
+  }
+}
+
+input[type="submit"].choose-metric {
+  display: none;
+}
+
+a.button.new-metric {
+  margin-left: 10px;
+}
+
+div.metric {
+  overflow: hidden;
+}
+
+form.objective-metric-form {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+h2#projects-header {
+  margin: 0;
+}
+
+.metric {
   .y.axis line, #line-viz .y.axis path {
     fill: none;
     stroke: #555;
   }
-  
+
   .x.axis line {
     fill: none;
     stroke: none;
   }
-  
+
   text {
     fill: #555;
     font-size: 0.9em;
   }
-  
+
   .line {
     fill: none;
     stroke: #FF530D;
     stroke-width: 2px;
   }
-
 }
-

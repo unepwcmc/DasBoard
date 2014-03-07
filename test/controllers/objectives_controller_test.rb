@@ -10,7 +10,7 @@ class ObjectivesControllerTest < ActionController::TestCase
 
     new_objective = assigns(:objective)
     assert_not_nil new_objective, "Expected @objective to be an objective"
-    assert_equal "New Objective", new_objective.name
+    assert_equal "Enter the name of the new objective", new_objective.name
     assert_equal project_id, new_objective.project_id,
       "Expected the new objective to be associated to the given project"
   end
