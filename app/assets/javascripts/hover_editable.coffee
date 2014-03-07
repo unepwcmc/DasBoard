@@ -5,9 +5,9 @@ class window.window.HoverEditable
     $("body").on(
       'mouseenter', '[data-behavior="hover-edit"]', HoverEditable.showEditTab
     )
-    $("body").on(
-      'mouseleave', '[data-behavior="hover-edit"]', HoverEditable.hideEditTab
-    )
+    #$("body").on(
+      #'mouseleave', '[data-behavior="hover-edit"]', HoverEditable.hideEditTab
+    #)
 
   @showEditTab: ->
     # Unless there is an existing edit happening
@@ -34,7 +34,7 @@ class HoverTab
     @hovering = false
 
   render: ->
-    @$el = $("<div class='hover-edit-tab'>Edit</div>")
+    @$el = $("<div class='hover-edit-tab'></div>")
     $('body').append(@$el)
     @$el.hover(
       (=> @hovered = true),
