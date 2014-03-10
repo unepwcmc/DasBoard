@@ -63,5 +63,13 @@ body {
     stroke-width: 2px;
   }
 
+  circle.dot {
+    fill: #557AD4;
+  }
+  circle.dot:hover {
+    stroke: #ACB9D4;
+    stroke-width: 10px;
+  }
+
 }
 
