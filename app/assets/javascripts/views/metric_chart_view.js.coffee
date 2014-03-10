@@ -3,31 +3,37 @@ class window.MetricChartView
     unless @metric?
       throw new Error("No metric provided, can't create MetricChartView")
 
+    @d3 = chart.d3
     @render()
 
-  dateFormatter: (data) ->
-    d1 = data[0].date
-    d2 = data[data.length - 1].date
-    period = d2 - d1
+  dateFormat: ->
+    data = @metric.attributes.data
+    firstDate = data[0].date
+    lastDate = data[data.length - 1].date
+    period = lastDate - firstDate
+
+    format = { format: '%H%M', tickCount: 6 }
 
     if period > 2.62974e6
-      return { format: '%b', ticks: 6 }
+      format = { format: '%b', tickCount: 6 }
     else if period > (86400 * 3)
-      return { format: '%a %e %b', ticks: 4 }
+      format = { format: '%a %e %b', tickCount: 4 }
     else if period > 86400
-      return { format: '%H%M %a %e %b', ticks: 4 }
-    else
-      return { format: '%H%M', ticks: 6 }
+      format = { format: '%H%M %a %e %b', tickCount: 4 }
+
+    return {
+      tickFormat: @d3.time.format(format.format)
+      ticks: format.tickCount
+    }
 
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
-      d3 = chart.d3
-      
-      viz_element = $('<div style="width: 800px; height: 600px;"></div>')
-      @$el.html(viz_element)
-      selection = d3.select(viz_element[0])
 
-      format = d3.time.format("%Y-%m-%d")
+      $vizEl = $('<div style="width: 800px; height: 600px;"></div>')
+      @$el.html($vizEl)
+      selection = @d3.select($vizEl[0])
+
+      format = @d3.time.format("%Y-%m-%d")
       tooltip_conf =
         html: (d, i) ->
           '<b>Date:</b> ' + format(d[0]) + ' <br> <b>Value:</b> ' + d[1]
@@ -38,15 +44,12 @@ class window.MetricChartView
       for d in @metric.attributes.data
         if d.value > max then max = d.value
 
-      dt = @dateFormatter(@metric.attributes.data)
-      console.log dt
-
       linechart = chart.Line()
         .margin({right: 50})
         .width(750)
         .height(500)
         .duration(0)
-        .x_axis({tickFormat: d3.time.format(dt.format), ticks: dt.ticks})
+        .x_axis(@dateFormat())
         .y_axis_offset(8)
         .x_scale('time')
         .date_type('epoch')
