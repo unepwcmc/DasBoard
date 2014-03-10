@@ -239,13 +239,7 @@ h2#projects-header {
 
 .metric {
   .y.axis line, #line-viz .y.axis path {
-    fill: none;
     stroke: #555;
-  }
-
-  .x.axis line {
-    fill: none;
-    stroke: none;
   }
 
   text {
@@ -255,16 +249,18 @@ h2#projects-header {
 
   .line {
     fill: none;
-    stroke: #FF530D;
+    stroke: #9bc244;
     stroke-width: 2px;
   }
 
   circle.dot {
-    fill: #557AD4;
+    fill: #79A021;
   }
   circle.dot:hover {
-    stroke: #ACB9D4;
-    stroke-width: 10px;
+    cursor: pointer;
   }
+}
 
+.d3-tip {
+  background: white;
 }
