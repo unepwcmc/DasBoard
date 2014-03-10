@@ -1,13 +1,14 @@
 <section class="objective" id="objective-<%= objective.id %>">
+  <%= link_to objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} do %>
+
+  <% end %>
+
   <%= editable_tag(objective, 'name', :h3)%>
   Threshold: <%= editable_tag(objective, 'threshold', :h4)%>
-  <%= link_to objective, method: :delete, remote: true, class: 'delete-objective', data: {confirm: 'Are you sure?'} do %>
-    <i class="fa fa-minus-circle"></i> Delete Objective
-  <% end %>
 
   <div class="metric">
     <% unless objective.metric_id.present? %>
-      No metric selected
+      Select a metric
       <%= render partial: 'objectives/select_metric', locals: {
         objective: objective,
         metrics: @metrics

@@ -19,7 +19,6 @@ gem 'foundation-rails'
 gem "font-awesome-rails"
 
 group :development do
-  gem 'debugger'
   gem 'capistrano', '~> 2.15.5'
   gem 'capistrano-ext'
   gem 'brightbox'
