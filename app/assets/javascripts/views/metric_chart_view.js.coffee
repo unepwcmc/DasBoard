@@ -19,6 +19,15 @@ class window.MetricChartView
     else
       return { format: '%H%M', ticks: 6 }
 
+  getCircleRadius: (data) ->
+    l = data.length
+    if l > 50
+      return 2
+    else if l > 10
+      return 4
+    else
+      return 5
+
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
       d3 = chart.d3
@@ -39,7 +48,6 @@ class window.MetricChartView
         if d.value > max then max = d.value
 
       dt = @dateFormatter(@metric.attributes.data)
-      console.log dt
 
       linechart = chart.Line()
         .margin({right: 50})
@@ -56,7 +64,10 @@ class window.MetricChartView
         .quantativeValue( (d) -> d.value )
         .overlapping_charts({ 
           names: ['circles'],
-          options: { circles: { tooltip: tooltip_conf } }
+          options: { circles: { 
+            tooltip: tooltip_conf,
+            r: @getCircleRadius(@metric.attributes.data)
+          } }
         })
         
       chart.draw(linechart, selection, [@metric.attributes.data])
