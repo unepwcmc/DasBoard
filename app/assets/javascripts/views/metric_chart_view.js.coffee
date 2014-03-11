@@ -59,7 +59,9 @@ class window.MetricChartView
         .quantativeValue( (d) -> d.value )
         .overlapping_charts({
           names: ['circles'],
-          options: { circles: { tooltip: tooltip_conf } }
+          options: { circles: {
+            tooltip: tooltip_conf
+          } }
         })
 
       chart.draw(linechart, selection, [@metric.attributes.data])
