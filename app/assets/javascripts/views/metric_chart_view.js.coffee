@@ -12,14 +12,14 @@ class window.MetricChartView
     lastDate = data[data.length - 1].date
     period = lastDate - firstDate
 
-    format = { format: '%H%M', tickCount: 6 }
+    format = { format: '%H:%M', tickCount: 6 }
 
     if period > 2.62974e6
       format = { format: '%b', tickCount: 6 }
     else if period > (86400 * 3)
       format = { format: '%a %e %b', tickCount: 4 }
     else if period > 86400
-      format = { format: '%H%M %a %e %b', tickCount: 4 }
+      format = { format: '%H:%M %a %e %b', tickCount: 4 }
 
     return {
       tickFormat: @d3.time.format(format.format)
