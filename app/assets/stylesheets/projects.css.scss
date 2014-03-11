@@ -236,3 +236,31 @@ form.objective-metric-form {
 h2#projects-header {
   margin: 0;
 }
+
+.metric {
+  .y.axis line, #line-viz .y.axis path {
+    stroke: #555;
+  }
+
+  text {
+    fill: #555;
+    font-size: 0.9em;
+  }
+
+  .line {
+    fill: none;
+    stroke: #9bc244;
+    stroke-width: 2px;
+  }
+
+  circle.dot {
+    fill: #79A021;
+  }
+  circle.dot:hover {
+    cursor: pointer;
+  }
+}
+
+.d3-tip {
+  background: white;
+}

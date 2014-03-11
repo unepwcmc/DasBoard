@@ -14,7 +14,7 @@ class ProjectsTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_select "ul#projects" do
-      assert_select "li", {
+      assert_select "h3", {
         count: 1,
         text: project.name
       }, 'Expected to see project name'

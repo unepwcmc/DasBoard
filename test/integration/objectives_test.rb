@@ -48,6 +48,6 @@ class ObjectivesTest < ActionDispatch::IntegrationTest
     updated_objective = JSON.parse(response.body)
 
     assert_equal objective.id, updated_objective['id']
-    assert_equal "42.0", updated_objective['threshold']
+    assert_equal 42.0, updated_objective['threshold']
   end
 end
