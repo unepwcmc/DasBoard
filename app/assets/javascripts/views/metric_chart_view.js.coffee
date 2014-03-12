@@ -29,10 +29,11 @@ class window.MetricChartView
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
 
-      $vizEl = $('<div style="width: 800px; height: 600px;"></div>')
+      containerWidth = $('.objective').width()
+      className = "viz-#{@metric.attributes.id}"
+      $vizEl = $("<div style='width: #{containerWidth}px; height: 600px;'></div>")
       @$el.html($vizEl)
       selection = @d3.select($vizEl[0])
-
       format = @d3.time.format("%Y-%m-%d")
       tooltip_conf =
         html: (d, i) ->
@@ -45,8 +46,9 @@ class window.MetricChartView
         if d.value > max then max = d.value
 
       linechart = chart.Line()
-        .margin({right: 50})
-        .width(750)
+        .class_name(className)
+        .margin({top: 10, right: 30, bottom: 40, left: 110})
+        .width(containerWidth)
         .height(500)
         .duration(0)
         .x_axis(@dateFormat())
@@ -61,6 +63,7 @@ class window.MetricChartView
           names: ['circles'],
           options: { circles: {
             tooltip: tooltip_conf
+            r: 2
           } }
         })
 
