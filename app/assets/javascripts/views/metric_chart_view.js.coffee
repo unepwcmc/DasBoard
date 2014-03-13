@@ -26,11 +26,20 @@ class window.MetricChartView
       ticks: format.tickCount
     }
 
+  # This function is just an example to show what needs to be passed to the 
+  # force_scale_bounds option on the chart.
+  # Delete it or return something useful!
+  setScaleBounds: (data) ->
+    data = data[0]
+    min_max = {}
+    min_max.min = data[0][1] - 1000
+    min_max.max = data[data.length - 1][1] + 1000
+    min_max
+
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
 
       containerWidth = $('.objective').width()
-      className = "viz-#{@metric.attributes.id}"
       $vizEl = $("<div style='width: #{containerWidth}px; height: 600px;'></div>")
       @$el.html($vizEl)
       selection = @d3.select($vizEl[0])
@@ -40,13 +49,7 @@ class window.MetricChartView
           '<b>Date:</b> ' + format(d[0]) + ' <br> <b>Value:</b> ' + d[1]
         offset: [-5, 0]
 
-      # This is a workaround, until I fix nightcharts!
-      max = 0
-      for d in @metric.attributes.data
-        if d.value > max then max = d.value
-
       linechart = chart.Line()
-        .class_name(className)
         .margin({top: 10, right: 30, bottom: 40, left: 110})
         .width(containerWidth)
         .height(500)
@@ -54,9 +57,19 @@ class window.MetricChartView
         .x_axis(@dateFormat())
         .y_axis_offset(8)
         .x_scale('time')
+
+        ## Forces the quantitative scale bounds:
+        ## false    ->  min: 0, max: data_max
+        # .force_scale_bounds(false) # Default, it can be omitted.
+        ## true     ->  min: data_min, max: data_max
+        # .force_scale_bounds(true)
+        ## obj      ->  min: obj.min || 0, max: obj.max || data_max
+        # .force_scale_bounds({min: 0}) # This equals to the default behavior.
+        ## function ->  obj = function(data), min: obj.min, max: obj.max
+        # .force_scale_bounds(@setScaleBounds) # This function is nonsense!
+
         .date_type('epoch')
         .date_format('%Y-%m-%d')
-        .max(max)
         .categoricalValue( (d) -> d.date )
         .quantativeValue( (d) -> d.value )
         .overlapping_charts({
