@@ -26,16 +26,6 @@ class window.MetricChartView
       ticks: format.tickCount
     }
 
-  # This function is just an example to show what needs to be passed to the 
-  # force_scale_bounds option on the chart.
-  # Delete it or return something useful!
-  setScaleBounds: (data) ->
-    data = data[0]
-    min_max = {}
-    min_max.min = data[0][1] - 1000
-    min_max.max = data[data.length - 1][1] + 1000
-    min_max
-
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
 
@@ -60,13 +50,11 @@ class window.MetricChartView
 
         ## Forces the quantitative scale bounds:
         ## false    ->  min: 0, max: data_max
-        # .force_scale_bounds(false) # Default, it can be omitted.
+        #.force_scale_bounds(false) # Default, it can be omitted.
         ## true     ->  min: data_min, max: data_max
-        # .force_scale_bounds(true)
+        #.force_scale_bounds(true)
         ## obj      ->  min: obj.min || 0, max: obj.max || data_max
-        # .force_scale_bounds({min: 0}) # This equals to the default behavior.
-        ## function ->  obj = function(data), min: obj.min, max: obj.max
-        # .force_scale_bounds(@setScaleBounds) # This function is nonsense!
+        #.force_scale_bounds({min: 0}) # This equals to the default behavior.
 
         .date_type('epoch')
         .date_format('%Y-%m-%d')
