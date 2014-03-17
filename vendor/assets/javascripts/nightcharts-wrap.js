@@ -10039,7 +10039,6 @@ define('base_config', [
 ], function(d3) {
     
     return {
-      class_name: false,
       // layout.
       margin: {top: 20, right: 20, bottom: 40, left: 40},
       width: 500,
@@ -10048,6 +10047,12 @@ define('base_config', [
       // One of: ordinal, linear, time
       x_scale: 'ordinal',
       y_scale: 'linear',
+      // Forces the quantitative scale bounds:
+      // false    ->  min: 0, max: data_max
+      // true     ->  min: data_min, max: data_max
+      // obj      ->  min: obj.min, max: obj.max
+      // function ->  obj = function(data), min: obj.min, max: obj.max
+      force_scale_bounds: false,
       // axes, apart from `show`, properties match d3's api.
       x_axis: {
         show: true,
@@ -10125,7 +10130,6 @@ define('utils/utils',["d3", "d3_tip"], function(d3, d3_tip) {
       };
   }
 
-
   // For each attribute in `state` it sets a getter-setter function 
   // on `obj`.
   // Accepts one level nested `state` objects.
@@ -10187,6 +10191,18 @@ define('utils/utils',["d3", "d3_tip"], function(d3, d3_tip) {
     return this[name+'Scaffolding'];
   }
 
+  function getMinMaxValues (data) {
+    var min = Infinity,
+        max = 0;
+    data.forEach( function (data, i) {
+      var min_p = d3.min( data, function(d) { return parseFloat(d[1]); } ),
+          max_p = d3.max( data, function(d) { return parseFloat(d[1]); } );
+      min = min_p < min ? min_p : min;
+      max = max_p > max ? max_p : max;
+    });
+    return {min: min, max: max};
+  }
+
   return {
     extend: extend,
     getset: getset,
@@ -10195,6 +10211,7 @@ define('utils/utils',["d3", "d3_tip"], function(d3, d3_tip) {
     endall: endall,
     tip: tip,
     getScaffoldingMethod: getScaffoldingMethod,
+    getMinMaxValues: getMinMaxValues,
   };
 
 });
@@ -10213,7 +10230,6 @@ define('mixins/data_helpers', [
     var duration = __.duration,
         data = __.data;
     return function (d, i) {
-      //debugger;
       return i / data[0].length * duration;
     }
   };
@@ -10328,17 +10344,26 @@ define('mixins/scale_helpers', [
   }
 
   // Sets the range and domain for the linear scale.
+  // TODO: unit test.
   function _applyLinearScale (range, __) {
-    var max;
-    if (__.max) {
-      max = __.max;
+    var force_scale_bounds = __.force_scale_bounds,
+        min_max,
+        min,
+        max;
+    if ( force_scale_bounds === false ) {
+      min_max = utils.getMinMaxValues(__.data);
+      return this.range(range).domain([0, min_max.max]);
+    } else if ( force_scale_bounds === true ) {
+      min_max = utils.getMinMaxValues(__.data);
+      return this.range(range).domain([min_max.min, min_max.max]);
+    } else if ( utils.isObject(force_scale_bounds) ) {
+      min_max = force_scale_bounds,
+      min = min_max.min || 0,
+      max = min_max.max || utils.getMinMaxValues(__.data).max;
+      return this.range(range).domain([min, max]);
     } else {
-      // TODO: this is fundamentally broken!!!
-      // It does not handle array of arrays...
-      // Relying for now on passing __.max
-      max = d3.max( __.data, function(d) { return parseFloat(d[1]); } );
+      throw new Error("force_scale_bounds wrong type");
     }
-    return this.range(range).domain([0, max]);
   }
 
   function _applyTimeScale (range, __) {
@@ -10394,6 +10419,9 @@ define('mixins/scale_helpers', [
     this.setScales = setScale;
     this.applyScale = applyScale;
     this.applyScales = applyScale;
+    // private methods, exposed for testing
+    this._applyLinearScale = _applyLinearScale;
+    this._getRange = _getRange;
     return this;
   };
 
@@ -10511,32 +10539,21 @@ define('mixins/scaffolding', [
     var self = this;
 
     // Select the svg element, if it exists.
-    if (__.class_name) {
-      this.svg = selection.append("svg")
-        .attr("class", __.class_name);
-        //.datum([this.__.data])
-      // Otherwise, create the skeletal chart.
-      //this.gEnter = this.svg.enter().append("svg").attr("id", __.id)
-      this.gEnter =  this.svg.append("g");
-    } else {
-      this.svg = selection.selectAll("svg").data([this.__.data]);
-      // Otherwise, create the skeletal chart.
-      this.gEnter = this.svg.enter().append("svg")
-        .append("g");
-    }
-    
+    this.svg = selection.selectAll("svg").data([this.__.data]);
+    // Otherwise, create the skeletal chart.
+    this.gEnter = this.svg.enter().append("svg")
+      .append("g");
     // Initializing the tooltip.
     if ( __.tooltip ) {
       this.tip = utils.tip( __.tooltip );
       this.gEnter.call(this.tip);
     }
    
-    this.gEnter.append("g")
-      .attr("class", chart_class + ' ' + __.class_name);
+    this.gEnter.append("g").attr("class", chart_class);
     //TODO: we need to handle bar offsets and others?
 
     __.overlapping_charts.names.forEach( function (chart_name) {
-      self.gEnter.append("g").attr("class", chart_name + ' ' + __.class_name);
+      self.gEnter.append("g").attr("class", chart_name);
     });
 
     this.gEnter.append("g").attr("class", "x axis");
@@ -10608,7 +10625,7 @@ define('bar/bar_helpers',["d3", "utils/utils"], function(d3, utils) {
       return this.append("rect")
         .attr("class", "bar")
         .attr("x", function(d) { 
-          return __.xScale(d[0]) //- __.y_axis_offset; 
+          return __.xScale(d[0]) - __.y_axis_offset; 
         })
         .attr("width", __.bar_width)
         //attention TODO: this get then overridden by the transition
@@ -10645,7 +10662,7 @@ define('bar/bar_helpers',["d3", "utils/utils"], function(d3, utils) {
     function transitionTimeBarsV (__) {
       return this.delay(__.delay)
         .attr("x", function(d) { 
-          return __.xScale(d[0]) //- __.y_axis_offset; 
+          return __.xScale(d[0]) - __.y_axis_offset; 
         })
         .attr("y", function(d) { return __.yScale(d[1]); })
         .attr("height", function(d) { return __.h - __.yScale(d[1]); });
@@ -10690,8 +10707,6 @@ define('bar/scaffolding', [
         bars_enter;
 
     // Select the bar elements, if they exists.
-    // TODO: only handles first nested array!
-    // This must look like circles!!!!
     self.bars_g = self.g.select("g.bars").selectAll(".bars")
       .data(data, self.dataIdentifier);
   
@@ -10702,9 +10717,9 @@ define('bar/scaffolding', [
     // Otherwise, create them.
     self.bars_g.enter().append("g").each( function (data, i) {
       var bars = d3.select(this).selectAll(".bar")
-        .data(data, self.dataIdentifier),
-      ov_options = __.overlapping_charts.options,
-      ov_bar_options = ov_options ? ov_options.bars : void 0;
+            .data(data, self.dataIdentifier),
+          ov_options = __.overlapping_charts.options,
+          ov_bar_options = ov_options ? ov_options.bars : void 0;
 
       // Exit phase (let us push out old circles before the new ones come in).
       bars.exit()
@@ -10752,30 +10767,42 @@ define('line/scaffolding', [
         data = __.data;
 
     // Select the line elements, if they exists.
-    self.lines = d3.select('g.lines.'+__.class_name).selectAll(".line")
+    self.lines_g = self.g.select('g.lines').selectAll(".lines")
       .data(data, self.dataIdentifier);
 
     // Exit phase (let us push out old lines before the new ones come in).
-    self.lines.exit()
+    self.lines_g.exit()
       .transition().duration(__.duration).style('opacity', 0).remove();
 
     // Otherwise, create them.
-    self.lines.enter().append("path")
-      .attr("class", "line")
-      .attr("d", self.line(__) )
-      .on('click', __.handleClick);
-    
-    if (__.tooltip) {
-      self.lines
-       .on('mouseover', self.tip.show)
-       .on('mouseout', self.tip.hide);
-    }
+    self.lines_g.enter().append("g").each( function (data, i) {
+      var lines = d3.select(this).selectAll(".bar")
+            .data([data], self.dataIdentifier),
+          ov_options = __.overlapping_charts.options,
+          ov_line_options = ov_options ? ov_options.bars : void 0;
+
+      // Exit phase (let us push out old lines before the new ones come in).
+      lines.exit()
+        .transition().duration(__.duration).style('opacity', 0).remove();      
+
+      lines.enter().append("path")
+        .attr("class", "line")
+        .attr("d", self.line(__) )
+        .on('click', __.handleClick);
       
-    //TODO
-    //And transition them.
-    //self.transitionLines
-    //  .call(transition.selectAll('.line'), 'vertical', params)
-    //  .call(utils.endall, data, __.handleTransitionEnd);
+      if (__.tooltip) {
+        lines
+         .on('mouseover', self.tip.show)
+         .on('mouseout', self.tip.hide);
+      }
+        
+      //TODO
+      //And transition them.
+      //self.transitionLines
+      //  .call(transition.selectAll('.line'), 'vertical', params)
+      //  .call(utils.endall, data, __.handleTransitionEnd);
+
+    });
 
     return this;
   }
@@ -10892,7 +10919,7 @@ define('circle/scaffolding', [
         data = __.data;
 
     // Select the circle elements, if they exists.
-    self.circles_g = d3.select('g.circles.'+__.class_name).selectAll(".circles")
+    self.circles_g = self.g.select('g.circles').selectAll(".circles")
       .data(data, self.dataIdentifier);
 
     // Exit phase (let us push out old circles before the new ones come in).
@@ -10901,7 +10928,7 @@ define('circle/scaffolding', [
 
     // Otherwise, create them.
     self.circles_g.enter().append("g").each( function (data, i) {
-      var circles = d3.select(this).selectAll(".dot")
+      var circles = d3.select(this).selectAll(".circle")
             .data(data, self.dataIdentifier),
           ov_options = __.overlapping_charts.options,
           ov_circle_options = ov_options ? ov_options.circles : void 0;

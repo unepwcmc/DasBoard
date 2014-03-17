@@ -30,7 +30,6 @@ class window.MetricChartView
     if @metric.attributes.data? && @metric.attributes.data.length > 0
 
       containerWidth = $('.objective').width()
-      className = "viz-#{@metric.attributes.id}"
       $vizEl = $("<div style='width: #{containerWidth}px; height: 600px;'></div>")
       @$el.html($vizEl)
       selection = @d3.select($vizEl[0])
@@ -40,13 +39,7 @@ class window.MetricChartView
           '<b>Date:</b> ' + format(d[0]) + ' <br> <b>Value:</b> ' + d[1]
         offset: [-5, 0]
 
-      # This is a workaround, until I fix nightcharts!
-      max = 0
-      for d in @metric.attributes.data
-        if d.value > max then max = d.value
-
       linechart = chart.Line()
-        .class_name(className)
         .margin({top: 10, right: 30, bottom: 40, left: 110})
         .width(containerWidth)
         .height(500)
@@ -54,9 +47,9 @@ class window.MetricChartView
         .x_axis(@dateFormat())
         .y_axis_offset(8)
         .x_scale('time')
+        .force_scale_bounds(true)
         .date_type('epoch')
         .date_format('%Y-%m-%d')
-        .max(max)
         .categoricalValue( (d) -> d.date )
         .quantativeValue( (d) -> d.value )
         .overlapping_charts({
