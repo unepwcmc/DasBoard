@@ -47,15 +47,7 @@ class window.MetricChartView
         .x_axis(@dateFormat())
         .y_axis_offset(8)
         .x_scale('time')
-
-        ## Forces the quantitative scale bounds:
-        ## false    ->  min: 0, max: data_max
-        #.force_scale_bounds(false) # Default, it can be omitted.
-        ## true     ->  min: data_min, max: data_max
-        #.force_scale_bounds(true)
-        ## obj      ->  min: obj.min || 0, max: obj.max || data_max
-        #.force_scale_bounds({min: 0}) # This equals to the default behavior.
-
+        .force_scale_bounds(true)
         .date_type('epoch')
         .date_format('%Y-%m-%d')
         .categoricalValue( (d) -> d.date )
