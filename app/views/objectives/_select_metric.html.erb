@@ -2,4 +2,4 @@
   <%= f.select :metric_id, options_from_collection_for_select(@metrics, :id, :name) %>
   <%= f.submit "Choose metric", class: "choose-metric" %>
 <% end %> or
-<%= link_to "Create a new metric", new_metric_path, class: "button new-metric" %>
+<%= link_to "Create a new metric", new_metric_path, class: "new-metric" %>
