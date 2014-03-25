@@ -29,7 +29,7 @@ class window.MetricChartView
   render: ->
     if @metric.attributes.data? && @metric.attributes.data.length > 0
 
-      containerWidth = $('.objective').width()
+      containerWidth = $('.metric').width()
       $vizEl = $("<div style='width: #{containerWidth}px; height: 600px;'></div>")
       @$el.html($vizEl)
       selection = @d3.select($vizEl[0])
